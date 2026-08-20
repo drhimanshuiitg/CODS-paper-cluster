@@ -16,9 +16,25 @@ ENV_DIR="$PROJECT/.venv"
 GPU_ENV_DIR="$PROJECT/.gpu_classifier_venv"
 mkdir -p "$PROJECT/logs" "$PROJECT/environment" "$PROJECT/checkpoints/huggingface"
 cd "$PROJECT"
+
+bootstrap_venv() {
+  local target="$1"
+  if [[ ! -x "$target/bin/python" ]]; then
+    python3 -m venv --without-pip "$target"
+  fi
+  if ! "$target/bin/python" -m pip --version >/dev/null 2>&1; then
+    local get_pip="$TMPDIR/get-pip.py"
+    if [[ ! -f "$get_pip" ]]; then
+      curl --fail --location --retry 3 --output "$get_pip" https://bootstrap.pypa.io/get-pip.py
+    fi
+    "$target/bin/python" "$get_pip"
+  fi
+}
+
 if [[ ! -x "$ENV_DIR/bin/python" ]]; then
-  python3 -m venv "$ENV_DIR"
+  python3 -m venv --without-pip "$ENV_DIR"
 fi
+bootstrap_venv "$ENV_DIR"
 "$ENV_DIR/bin/python" -m pip install --upgrade pip setuptools wheel
 "$ENV_DIR/bin/python" -m pip install torch==2.9.0 torchvision==0.24.0 --index-url https://download.pytorch.org/whl/cu128
 "$ENV_DIR/bin/python" -m pip install -r requirements.txt
@@ -26,8 +42,9 @@ fi
 "$ENV_DIR/bin/python" -m pip freeze > "$PROJECT/environment/pip_freeze_slurm_${SLURM_JOB_ID}.txt"
 
 if [[ ! -x "$GPU_ENV_DIR/bin/python" ]]; then
-  python3 -m venv "$GPU_ENV_DIR"
+  python3 -m venv --without-pip "$GPU_ENV_DIR"
 fi
+bootstrap_venv "$GPU_ENV_DIR"
 "$GPU_ENV_DIR/bin/python" -m pip install --upgrade pip setuptools wheel
 "$GPU_ENV_DIR/bin/python" -m pip install --extra-index-url https://pypi.nvidia.com cuml-cu12==26.8.0
 "$GPU_ENV_DIR/bin/python" -m pip check
