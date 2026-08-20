@@ -1,0 +1,266 @@
+{
+  "valid": true,
+  "errors": [],
+  "subjects": 41,
+  "manifest_rows": 39596,
+  "logical_windows": 19798,
+  "fold_counts": {
+    "0": 9,
+    "1": 8,
+    "2": 8,
+    "3": 8,
+    "4": 8
+  },
+  "split_counts": [
+    {
+      "fold": 0,
+      "protocol": "R_R",
+      "train_rows": 11805,
+      "val_rows": 3990,
+      "test_rows": 4003,
+      "train_subjects": 24,
+      "val_subjects": 8,
+      "test_subjects": 9
+    },
+    {
+      "fold": 0,
+      "protocol": "S_S",
+      "train_rows": 11805,
+      "val_rows": 3990,
+      "test_rows": 4003,
+      "train_subjects": 24,
+      "val_subjects": 8,
+      "test_subjects": 9
+    },
+    {
+      "fold": 0,
+      "protocol": "R_S",
+      "train_rows": 11805,
+      "val_rows": 3990,
+      "test_rows": 4003,
+      "train_subjects": 24,
+      "val_subjects": 8,
+      "test_subjects": 9
+    },
+    {
+      "fold": 0,
+      "protocol": "S_R",
+      "train_rows": 11805,
+      "val_rows": 3990,
+      "test_rows": 4003,
+      "train_subjects": 24,
+      "val_subjects": 8,
+      "test_subjects": 9
+    },
+    {
+      "fold": 0,
+      "protocol": "RS_RS",
+      "train_rows": 23610,
+      "val_rows": 7980,
+      "test_rows": 8006,
+      "train_subjects": 24,
+      "val_subjects": 8,
+      "test_subjects": 9
+    },
+    {
+      "fold": 1,
+      "protocol": "R_R",
+      "train_rows": 11842,
+      "val_rows": 3966,
+      "test_rows": 3990,
+      "train_subjects": 25,
+      "val_subjects": 8,
+      "test_subjects": 8
+    },
+    {
+      "fold": 1,
+      "protocol": "S_S",
+      "train_rows": 11842,
+      "val_rows": 3966,
+      "test_rows": 3990,
+      "train_subjects": 25,
+      "val_subjects": 8,
+      "test_subjects": 8
+    },
+    {
+      "fold": 1,
+      "protocol": "R_S",
+      "train_rows": 11842,
+      "val_rows": 3966,
+      "test_rows": 3990,
+      "train_subjects": 25,
+      "val_subjects": 8,
+      "test_subjects": 8
+    },
+    {
+      "fold": 1,
+      "protocol": "S_R",
+      "train_rows": 11842,
+      "val_rows": 3966,
+      "test_rows": 3990,
+      "train_subjects": 25,
+      "val_subjects": 8,
+      "test_subjects": 8
+    },
+    {
+      "fold": 1,
+      "protocol": "RS_RS",
+      "train_rows": 23684,
+      "val_rows": 7932,
+      "test_rows": 7980,
+      "train_subjects": 25,
+      "val_subjects": 8,
+      "test_subjects": 8
+    },
+    {
+      "fold": 2,
+      "protocol": "R_R",
+      "train_rows": 11862,
+      "val_rows": 3970,
+      "test_rows": 3966,
+      "train_subjects": 25,
+      "val_subjects": 8,
+      "test_subjects": 8
+    },
+    {
+      "fold": 2,
+      "protocol": "S_S",
+      "train_rows": 11862,
+      "val_rows": 3970,
+      "test_rows": 3966,
+      "train_subjects": 25,
+      "val_subjects": 8,
+      "test_subjects": 8
+    },
+    {
+      "fold": 2,
+      "protocol": "R_S",
+      "train_rows": 11862,
+      "val_rows": 3970,
+      "test_rows": 3966,
+      "train_subjects": 25,
+      "val_subjects": 8,
+      "test_subjects": 8
+    },
+    {
+      "fold": 2,
+      "protocol": "S_R",
+      "train_rows": 11862,
+      "val_rows": 3970,
+      "test_rows": 3966,
+      "train_subjects": 25,
+      "val_subjects": 8,
+      "test_subjects": 8
+    },
+    {
+      "fold": 2,
+      "protocol": "RS_RS",
+      "train_rows": 23724,
+      "val_rows": 7940,
+      "test_rows": 7932,
+      "train_subjects": 25,
+      "val_subjects": 8,
+      "test_subjects": 8
+    },
+    {
+      "fold": 3,
+      "protocol": "R_R",
+      "train_rows": 11959,
+      "val_rows": 3869,
+      "test_rows": 3970,
+      "train_subjects": 25,
+      "val_subjects": 8,
+      "test_subjects": 8
+    },
+    {
+      "fold": 3,
+      "protocol": "S_S",
+      "train_rows": 11959,
+      "val_rows": 3869,
+      "test_rows": 3970,
+      "train_subjects": 25,
+      "val_subjects": 8,
+      "test_subjects": 8
+    },
+    {
+      "fold": 3,
+      "protocol": "R_S",
+      "train_rows": 11959,
+      "val_rows": 3869,
+      "test_rows": 3970,
+      "train_subjects": 25,
+      "val_subjects": 8,
+      "test_subjects": 8
+    },
+    {
+      "fold": 3,
+      "protocol": "S_R",
+      "train_rows": 11959,
+      "val_rows": 3869,
+      "test_rows": 3970,
+      "train_subjects": 25,
+      "val_subjects": 8,
+      "test_subjects": 8
+    },
+    {
+      "fold": 3,
+      "protocol": "RS_RS",
+      "train_rows": 23918,
+      "val_rows": 7738,
+      "test_rows": 7940,
+      "train_subjects": 25,
+      "val_subjects": 8,
+      "test_subjects": 8
+    },
+    {
+      "fold": 4,
+      "protocol": "R_R",
+      "train_rows": 11926,
+      "val_rows": 4003,
+      "test_rows": 3869,
+      "train_subjects": 24,
+      "val_subjects": 9,
+      "test_subjects": 8
+    },
+    {
+      "fold": 4,
+      "protocol": "S_S",
+      "train_rows": 11926,
+      "val_rows": 4003,
+      "test_rows": 3869,
+      "train_subjects": 24,
+      "val_subjects": 9,
+      "test_subjects": 8
+    },
+    {
+      "fold": 4,
+      "protocol": "R_S",
+      "train_rows": 11926,
+      "val_rows": 4003,
+      "test_rows": 3869,
+      "train_subjects": 24,
+      "val_subjects": 9,
+      "test_subjects": 8
+    },
+    {
+      "fold": 4,
+      "protocol": "S_R",
+      "train_rows": 11926,
+      "val_rows": 4003,
+      "test_rows": 3869,
+      "train_subjects": 24,
+      "val_subjects": 9,
+      "test_subjects": 8
+    },
+    {
+      "fold": 4,
+      "protocol": "RS_RS",
+      "train_rows": 23852,
+      "val_rows": 8006,
+      "test_rows": 7738,
+      "train_subjects": 24,
+      "val_subjects": 9,
+      "test_subjects": 8
+    }
+  ]
+}

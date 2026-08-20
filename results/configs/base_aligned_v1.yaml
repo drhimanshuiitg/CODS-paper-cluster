@@ -1,0 +1,85 @@
+project_root: /home/pkdas/IEEE_healthcomm_workshop
+dataset_dir: /scratch/pkdas/IEEE_healthcomm_workshop/dataset/V5/Data
+seed: 42
+folds: 5
+
+metadata:
+  manifest: /home/pkdas/IEEE_healthcomm_workshop/metadata/dataset_manifest_aligned.csv
+  subject_folds: /home/pkdas/IEEE_healthcomm_workshop/metadata/subject_folds_5cv_aligned.csv
+  reference_clock: smartphone_annotation_seconds
+  recorder_alignment: piecewise_linear_unlabeled_rms_envelope_cross_correlation
+
+windowing:
+  mode: annotation_duration_matched_negative
+  exclude_wake_events: false
+  negative_excludes_awake_intervals: true
+  negative_excludes_all_respiratory_events: true
+  avoid_negative_overlap: true
+  paired_common_device_coverage_only: true
+  require_reliable_device_alignment_support: true
+
+audio:
+  raw_sample_rate: 8000
+  target_sample_rate: 16000
+  resampling: scipy_resample_poly_fir_antialias
+  main_preprocessing: peak_normalization
+  ssl_max_chunk_seconds: 20.0
+  ssl_chunking: non_overlapping_hidden_frame_weighted_mean
+  peak_epsilon: 1.0e-8
+  filter:
+    order: 4
+    low_hz: 20.0
+    high_hz: 4000.0
+
+spectrogram:
+  n_mels: 128
+  n_fft: 1024
+  hop_length: 256
+  fmax: 8000
+  cmap: magma
+
+encoders:
+  wav2vec2: facebook/wav2vec2-base
+  hubert: facebook/hubert-base-ls960
+  wavlm: microsoft/wavlm-base
+  data2vec_audio: facebook/data2vec-audio-base-960h
+  data2vec_spectrogram: facebook/data2vec-vision-base
+  pooling: temporal_mean
+  inference_precision: float16_cuda
+
+classifiers:
+  selection_metric: balanced_accuracy
+  tuning_budget_per_classifier: 2
+  random_forest:
+    - {n_estimators: 300, max_depth: null, class_weight: balanced, n_jobs: 4}
+    - {n_estimators: 300, max_depth: 20, class_weight: balanced, n_jobs: 4}
+  xgboost:
+    - {n_estimators: 300, max_depth: 4, learning_rate: 0.05, subsample: 0.9, colsample_bytree: 0.9, tree_method: hist, n_jobs: 4}
+    - {n_estimators: 300, max_depth: 8, learning_rate: 0.05, subsample: 0.9, colsample_bytree: 0.9, tree_method: hist, n_jobs: 4}
+  svm_rbf:
+    - {C: 1.0, gamma: scale, probability: true, class_weight: balanced, cache_size: 4096}
+    - {C: 10.0, gamma: scale, probability: true, class_weight: balanced, cache_size: 4096}
+  mlp:
+    - {hidden_layer_sizes: [256, 128], max_iter: 400, alpha: 0.0001, early_stopping: true}
+    - {hidden_layer_sizes: [256, 128], max_iter: 400, alpha: 0.001, early_stopping: true}
+
+protocols: [R_R, S_S, R_S, S_R, RS_RS]
+representations:
+  classical: [classical]
+  hubert: [hubert]
+  wavlm: [wavlm]
+  wav2vec2: [wav2vec2]
+  data2vec_audio: [data2vec_audio]
+  data2vec_spectrogram: [data2vec_spectrogram]
+  data2vec_fusion: [data2vec_audio, data2vec_spectrogram]
+  full_fusion: [hubert, wavlm, wav2vec2, data2vec_audio, data2vec_spectrogram]
+  full_minus_hubert: [wavlm, wav2vec2, data2vec_audio, data2vec_spectrogram]
+  full_minus_wavlm: [hubert, wav2vec2, data2vec_audio, data2vec_spectrogram]
+  full_minus_wav2vec2: [hubert, wavlm, data2vec_audio, data2vec_spectrogram]
+  full_minus_data2vec_audio: [hubert, wavlm, wav2vec2, data2vec_spectrogram]
+  full_minus_data2vec_spectrogram: [hubert, wavlm, wav2vec2, data2vec_audio]
+  full_minus_data2vec: [hubert, wavlm, wav2vec2]
+
+logging:
+  master_log: /home/pkdas/IEEE_healthcomm_workshop/results/master_experiment_log.csv
+  git_commit_fallback: unavailable

@@ -1,0 +1,246 @@
+tree:
+  - id: N01
+    type: question
+    support_level: explicit
+    source_refs: ["results/audit/current_pipeline_audit.md", "paper/conference_101719.tex"]
+    title: "Does a device-specific classifier transfer across the recorder/smartphone device pair?"
+    description: "Central research question, reconstructed from the paper's abstract and the pre-session audit that found the originally submitted numbers unreproducible."
+    children:
+      - id: N02
+        type: dead_end
+        support_level: explicit
+        source_refs: ["results/audit/current_pipeline_audit.md"]
+        title: "Original submission's numbers traced to a leaky script"
+        hypothesis: "The originally submitted paper's headline cross-device numbers (F1=90.9% S->R, AUC=0.950) were valid measurements of cross-device transfer."
+        failure_mode: "device_robust_sleep_apnea_experiments_v4.py sets strict_patient_disjoint_cross_device=false; cross-device protocols train on every source-domain subject and test on every target-domain subject, with paired subjects appearing on both sides via the opposite device -- subject-level leakage, not a genuine held-out evaluation. Labels are also filename-keyword-based, incompatible with this project's real annotation-JSON corpus."
+        lesson: "Any inherited 'known good' benchmark script must be independently re-audited for leakage before trusting its numbers, especially cross-device/cross-domain splits where the leakage mode is a shared subject rather than a shared row."
+      - id: N03
+        type: decision
+        support_level: explicit
+        source_refs: ["src/sleep_quadnet/evaluation.py"]
+        title: "Rebuild with a hard subject-disjoint assertion, not just a fold-file convention"
+        choice: "Add a runtime AssertionError in split_indices() that checks train/val/test subject-set intersections on every single fold-run, not only at fold-file construction time."
+        alternatives: "Trust the fold-assignment CSV's own construction to be leakage-free (rejected -- this is exactly the class of silent-trust failure that produced N02); add a one-time offline check instead of a per-run runtime assertion (rejected -- would not catch a future code change that bypasses the intended split path)."
+        children:
+          - id: N04
+            type: experiment
+            support_level: explicit
+            source_refs: ["results/P0_device_gap"]
+            title: "E01: Main cross-device benchmark, 14 representations x 4 classifiers x 4 protocols x 5 folds"
+            result: "1,120 completed fold-runs. HuBERT alone: 0.5466 mean cross-device BA, highest of all 14 representations. Full_fusion (5-encoder concat): 0.5311. Device gap present for every real representation (0.0-7.5pt matched-minus-cross)."
+  - id: N06
+    type: question
+    support_level: explicit
+    source_refs: ["paper/conference_101719.tex"]
+    title: "Can post-hoc domain adaptation close the device gap without retraining the encoder?"
+    description: "Tests two standard techniques (PCA dimensionality reduction, CORAL feature-space alignment) as candidate mitigations for the device gap found in E01/N04."
+    also_depends_on: [N04]
+    children:
+      - id: N07
+        type: experiment
+        support_level: explicit
+        source_refs: ["results/P1_dimension_control"]
+        title: "E03: PCA dimensionality reduction, first attempt"
+        result: "Fold-local PCA, refit stage fit on source-device train+val only. Collapsed to a degenerate single-class predictor: 43/60 audited combinations at exactly BA=0.500."
+        children:
+          - id: N08
+            type: dead_end
+            support_level: explicit
+            source_refs: ["results/P1_statistics_pca_fix/pca_fix_vs_baseline.csv"]
+            title: "PCA collapses to a degenerate single-class predictor"
+            hypothesis: "Fold-local PCA dimensionality reduction preserves most of the uncorrected representation's cross-device discriminative signal at lower dimensionality."
+            failure_mode: "Max predicted test-window probability never exceeds 0.50 in the R->S direction (mirror-image all-positive collapse in S->R); ROC-AUC stayed modestly above chance (0.50-0.59), showing the ranking signal survived even though the fixed 0.5 decision threshold did not transfer -- a collapse in the classifier's calibrated output, not in the underlying feature signal."
+            lesson: "A degenerate-looking failure (all-one-class predictions) should be checked for a calibration/threshold artifact via the ranking metric (ROC-AUC) before concluding the underlying representation carries no signal."
+          - id: N09
+            type: decision
+            support_level: explicit
+            source_refs: ["src/sleep_quadnet/advanced.py"]
+            title: "Root-cause by comparing PCA's fit scope against CORAL's, in the same codebase"
+            choice: "Extend PCA's refit-stage fit data to include unlabeled target-device validation features, exactly mirroring CORAL's own pre-existing covariance-fit scope, rather than treating PCA's failure as evidence the technique is unsuited to the task."
+            alternatives: "Accept the collapse as a fundamental PCA limitation on this task (rejected -- untested against the alternative hypothesis that scope, not the technique itself, was the cause); try a different dimensionality-reduction technique entirely (rejected -- would not distinguish a scope artifact from a real limitation, and CORAL's own already-correct scope provided a direct, cheap comparison point)."
+            children:
+              - id: N10
+                type: experiment
+                support_level: explicit
+                source_refs: ["scripts/_pca_fix_smoketest.py", "results/P1_dimension_control_v3", "results/P1_statistics_pca_fix/pca_fix_vs_baseline.csv"]
+                title: "E04: Target-aware PCA refit fix"
+                result: "Smoke test first (+3.37pt BA, one combo), then full validation across 320 combinations. Paired bootstrap vs. pre-fix baseline (60 overlapping combos): +0.0299 mean BA, 30/60 significant positive, 0/60 significant negative. 43/60 pre-fix collapsed combinations directly confirmed the diagnosis."
+      - id: N12
+        type: experiment
+        support_level: explicit
+        source_refs: ["results/P1_domain_adaptation"]
+        title: "E05: CORAL feature-space alignment"
+        result: "3 representations x 2 cross-device protocols x 5 folds x svm_rbf = 30 combinations. Reduces balanced accuracy relative to uncorrected features in 6/6 representation/direction combinations; aligned classifier shows specificity dominance (0.78-0.99) over sensitivity (0.01-0.29) throughout."
+        children:
+          - id: N13
+            type: dead_end
+            support_level: explicit
+            source_refs: ["results/P1_domain_adaptation", "paper/conference_101719.tex"]
+            title: "CORAL consistently reduces accuracy relative to uncorrected features"
+            hypothesis: "CORAL's covariance whitening-recoloring, fit on unlabeled target-device validation data, should bridge the source/target feature distributions and reduce the device gap, analogous to how the same target-aware scoping fixed PCA (N09/N10)."
+            failure_mode: "Unlike PCA, no scope-artifact explanation was found -- CORAL already used the target-aware scope from the start. The aligned classifier instead collapses toward predicting the majority-safe class (high specificity, near-zero sensitivity) rather than genuinely bridging the domains."
+            lesson: "A correctly-scoped domain-adaptation technique can still fail for reasons other than fit-data scope (e.g. the covariance-alignment assumption itself may not hold for this feature space) -- the PCA fix's success does not generalize to 'any post-hoc statistical correction can be fixed by adding target data,' since CORAL already had that and still failed."
+  - id: N14
+    type: question
+    support_level: explicit
+    source_refs: ["results/P0_ablation"]
+    title: "Do the fusion's individual encoders carry complementary or redundant information?"
+    description: "Tests whether full_fusion's underperformance relative to HuBERT alone (N04) is explained by specific encoders hurting the fusion, or by general redundancy across all of them."
+    also_depends_on: [N04]
+    children:
+      - id: N15
+        type: experiment
+        support_level: explicit
+        source_refs: ["results/P0_ablation"]
+        title: "E02: Leave-one-encoder-out ablation"
+        result: "6 variants x 4 classifiers x 4 protocols x 5 folds. Point estimates alone suggested most single-encoder removals numerically exceed full_fusion's cross-device BA (see N16 for why this reading was corrected)."
+        children:
+          - id: N16
+            type: dead_end
+            support_level: explicit
+            source_refs: ["results/P0_ablation, point-estimate-only aggregation predating N17's significance test"]
+            title: "Point-estimate-only read overstated the effect"
+            hypothesis: "Since removing individual encoders from full_fusion numerically raises mean cross-device balanced accuracy in most cases, individual encoders are actively harmful to the fusion, not merely redundant."
+            failure_mode: "This reading used only mean point estimates with no significance test; when a proper paired subject-level bootstrap was run (N17), the effect mostly vanished into noise."
+            lesson: "A point-estimate ranking across many representations is not evidence of a real effect without a paired significance test on the same test subjects -- this project's own established methodology (used everywhere else, e.g. N04, N10) should have been applied to the ablation from the start rather than as a correction."
+          - id: N17
+            type: decision
+            support_level: explicit
+            source_refs: ["results/P0_ablation_statistics/ablation_vs_full_fusion.csv"]
+            title: "Run the same paired-bootstrap significance test used everywhere else, rather than trusting point estimates"
+            choice: "Apply scripts/run_ablation_significance.py (the same paired subject-level bootstrap methodology as E04/E06) to every leave-one-out variant against full_fusion before drawing any conclusion about encoder importance."
+            alternatives: "Report the point-estimate ranking as-is (rejected once the significance gap was noticed during a direct project audit); leave the ablation without any significance backing (rejected -- inconsistent with every other comparison in this project)."
+            children:
+              - id: N17b
+                type: experiment
+                support_level: explicit
+                source_refs: ["results/P0_ablation_statistics/ablation_vs_full_fusion.csv"]
+                title: "Corrected ablation significance test"
+                result: "Mean difference -0.0003, only 7/89 evaluable combinations significant (4 positive, 3 negative) -- full_fusion and its ablated variants are statistically indistinguishable in the large majority of configurations."
+  - id: N18
+    type: question
+    support_level: explicit
+    source_refs: ["scripts/build_window_corroboration.py"]
+    title: "Does filtering training labels lacking objective SpO2 corroboration improve cross-device sensitivity?"
+    description: "Tests whether PSG-annotated positive events lacking a matching SpO2 desaturation are annotation noise whose removal from training would help, or real (differently-scored) positives whose removal would hurt."
+    also_depends_on: [N04]
+    children:
+      - id: N19
+        type: dead_end
+        support_level: explicit
+        source_refs: ["scripts/build_window_corroboration.py:6-19 (module docstring, dated 2026-08-19)"]
+        title: "Direct-timestamp join initially matched only ~50% of events"
+        hypothesis: "A float-precision mismatch in start_sec timestamps was causing the manifest-to-corroboration-audit join to miss matches."
+        failure_mode: "Widening the join tolerance to 0.01s did not resolve the ~50% match rate. The real cause was that the Recorder device's timestamps carry an additional piecewise-linear clock-drift correction absent from the Smartphone's reference-clock timestamps -- a device-alignment issue, not a numeric-precision issue."
+        lesson: "When a join between two derived-timestamp sources fails partially, check whether the two sources use the same clock-correction convention before assuming the mismatch is a numeric tolerance problem."
+      - id: N20
+        type: experiment
+        support_level: explicit
+        source_refs: ["results/P2_label_quality_ablation", "results/P2_statistics"]
+        title: "E06: Corroboration-filtered training ablation"
+        result: "Paired bootstrap over 32 combinations: 30/32 negative point difference, 12/32 significant negative, 0/32 significant positive. Reverses an earlier single-fold smoke test's promising-looking +0.49pt BA result."
+        children:
+          - id: N21
+            type: dead_end
+            support_level: explicit
+            source_refs: ["results/P2_statistics/corroboration_filter_vs_baseline.csv"]
+            title: "Filtering measurably hurts performance"
+            hypothesis: "Training-positive windows whose annotated event lacks a corroborating SpO2 desaturation are annotation noise, and removing them should improve or leave unchanged cross-device classifier performance."
+            failure_mode: "Filtering reduced balanced accuracy in every one of 32 tested combinations, significantly in 13. The single-fold smoke test that motivated running this at scale was not representative of the full result."
+            lesson: "A promising single-fold or single-combo smoke-test result must be validated at full scale (all folds, all protocols) with proper significance testing before being trusted -- this project's own smoke-test-then-validate discipline caught this reversal rather than promoting the smoke test's result directly."
+  - id: N22
+    type: question
+    support_level: explicit
+    source_refs: ["scripts/extract_hear_features.py"]
+    title: "Does a health-acoustic-domain foundation model (HeAR) improve on general-purpose speech SSL encoders for this task?"
+    description: "Tests whether a foundation model pretrained specifically on health acoustics (coughs, breathing) transfers better to this respiratory-sound classification task than general-purpose speech SSL encoders."
+    also_depends_on: [N04]
+    children:
+      - id: N23
+        type: dead_end
+        support_level: explicit
+        source_refs: ["job 1539/1541 logs", "GPU_INSTRUCTIONS.md"]
+        title: "HeAR silently computed on CPU inside a GPU-allocated job"
+        hypothesis: "A SLURM job requesting and receiving a GPU allocation, running a subprocess-bridged model extraction, would use that GPU."
+        failure_mode: "subprocess.run(..., env=...) replaced rather than inherited the parent environment, stripping CUDA_VISIBLE_DEVICES; the job ran 5+ minutes on CPU with zero error before being caught by manual process inspection (ps/nvidia-smi cross-check). A second, deeper bug (missing bundled CUDA/cuDNN libraries in the isolated venv) was then caught immediately (13s) by the hard-fail guard added in direct response to the first bug."
+        lesson: "Never construct a subprocess environment from scratch; always inherit the parent's and only override specific keys, or GPU-visibility environment variables can be silently lost with no error at all."
+      - id: N24
+        type: decision
+        support_level: explicit
+        source_refs: ["GPU_INSTRUCTIONS.md", "scripts/extract_hear_features.py", "hear_worker.py"]
+        title: "Add a project-wide hard GPU-presence guard, no silent fallback, anywhere"
+        choice: "Fix the env-inheritance bug; add an explicit tf.config.list_physical_devices('GPU') hard-fail check to hear_worker.py; then audit the rest of the codebase for the same class of risk rather than considering the single incident closed."
+        alternatives: "Fix only the specific env-inheritance bug that caused the observed incident (rejected -- would leave the isolated-venv pattern vulnerable to the same class of failure in any future addition); rely on manual spot-checks going forward instead of a code-level guard (rejected -- the whole point of the incident was that manual inspection is not a reliable substitute for a hard-fail check)."
+        children:
+          - id: N25
+            type: experiment
+            support_level: explicit
+            source_refs: ["results/P0_device_gap (hear, full_fusion_plus_hear rows)"]
+            title: "E07: HeAR benchmark, confirmed genuinely on GPU"
+            result: "0.5040 BA alone (weakest of 14 representations, closest to the 0.50 chance floor). full_fusion_plus_hear: 0.5288, worse than full_fusion alone (0.5311)."
+            children:
+              - id: N26
+                type: dead_end
+                support_level: explicit
+                source_refs: ["results/P0_device_gap"]
+                title: "HeAR underperforms every general-purpose encoder, alone and fused"
+                hypothesis: "HeAR's health-acoustic-specific pretraining (~174k hours of coughs/breathing) should transfer better to this respiratory-sound task than general-purpose speech SSL encoders, either alone or as an addition to the existing fusion."
+                failure_mode: "HeAR alone is the weakest of all 14 tested representations; fused into full_fusion it reduces rather than improves cross-device performance."
+                lesson: "Domain-matched pretraining data (health acoustics generally) does not guarantee better transfer to a specific, narrower discrimination task (this dataset's binary apnea-event-window label) than general-purpose pretraining -- the pretraining objective and corpus's actual acoustic-event granularity may matter more than topical domain match."
+  - id: N27
+    type: question
+    support_level: explicit
+    source_refs: ["scripts/compute_odi_hypoxic_burden.py"]
+    title: "Is ODI/Hypoxic-Burden useful as a raw per-window classifier feature?"
+    description: "Tests whether a per-subject clinical severity summary, concatenated onto per-window audio embeddings, adds per-window discriminative signal."
+    also_depends_on: [N04]
+    children:
+      - id: N28
+        type: dead_end
+        support_level: explicit
+        source_refs: ["results/P0_device_gap (odi_hb, hubert_odi_hb rows)"]
+        title: "Theoretically predicted null result, empirically confirmed"
+        hypothesis: "ODI/Hypoxic-Burden, despite being a per-subject-constant value, might still help a per-window classifier by acting as a subject-level severity prior the classifier learns to weight."
+        failure_mode: "odi_hb alone: exactly chance level (0.4958 BA, identical in both matched and cross-device regimes since the feature does not vary by device or window). hubert_odi_hb statistically indistinguishable from hubert alone (0.5473 vs 0.5466)."
+        lesson: "This was predicted before testing (a per-subject-constant value cannot add per-window discriminative signal to a per-window classification task) and the empirical result confirmed rather than merely observed the prediction -- worth stating as a confirmed prediction, not just a negative finding, when reporting."
+  - id: N29
+    type: question
+    support_level: explicit
+    source_refs: ["scripts/build_sliding_window_ahi_targets.py"]
+    title: "Can a non-annotation-privileged, whole-night severity target be learned from single-device audio?"
+    description: "Tests feasibility of a clinically-real target (whole-night desaturation-rate severity) that does not depend on PSG event-annotation-centered window selection, unlike every other experiment in this ARA."
+    also_depends_on: [N28]
+    children:
+      - id: N30
+        type: decision
+        support_level: explicit
+        source_refs: ["scripts/build_sliding_window_manifest.py"]
+        title: "Bin the whole night into fixed clock epochs, not annotated-event-centered windows"
+        choice: "Build a new manifest keyed on fixed 5-minute clock epochs, independent of where annotated events fall, deliberately escaping the annotation-privileged-window framing of every other experiment's manifest."
+        alternatives: "Reuse the existing annotation-centered manifest with a severity label attached per window (rejected -- would still privilege annotated-event locations rather than testing whole-night, unbiased detection)."
+        children:
+          - id: N31
+            type: dead_end
+            support_level: explicit
+            source_refs: ["job 1548 crash log"]
+            title: "Epoch binning off the SpO2 timeline overran some devices' actual audio duration"
+            hypothesis: "Epochs defined on the SpO2 channel's timeline (0 to night_end) would always have corresponding audio available for the same subject and device."
+            failure_mode: "ValueError: Window length mismatch, got 463360 expected 2400000, at row 149/9950 -- SpO2 and audio recordings do not always end at the same instant for a given device."
+            lesson: "When binning a derived-signal timeline (SpO2) to construct windows into a different raw signal (audio), always validate the derived timeline's bounds against the actual target signal's availability per recording, not just per subject."
+          - id: N32
+            type: experiment
+            support_level: explicit
+            source_refs: ["results/P3_sliding_window_severity"]
+            title: "E09: Sliding-window binary severity classification"
+            result: "80/80 combinations complete (finished 2026-08-19). Cross-device mean BA 0.4859 (below chance, n=40); matched-device mean BA 0.5307 (n=40) -- consistent with the project's general device-gap pattern (C01-C03) extending to this task. No significance test yet run for this specific matched-vs-cross or cross-vs-chance comparison."
+      - id: N33
+        type: question
+        support_level: inferred
+        title: "Would a 4-class severity target or continuous AHI-proxy regression be more clinically meaningful than the binary first cut?"
+        description: "Not yet attempted -- inferred as the natural next step from the binary framing's stated rationale (reuse existing binary infra for speed), not from any explicit planning document found in the codebase."
+  - id: N34
+    type: question
+    support_level: inferred
+    title: "What would a representation-level (not post-hoc statistical) fix for the device gap look like?"
+    description: "Inferred from the paper's stated future-work framing (paired-recording contrastive device-invariance training, domain-adaptive continued pretraining) plus this project's own finding that post-hoc corrections are at best partially salvageable (PCA, N09-N10) and at worst fundamentally ineffective (CORAL, N12-N13) -- not yet implemented in this codebase as of ARA compilation."
+    also_depends_on: [N10, N13]

@@ -1,0 +1,25 @@
+{
+  "experiment_id": "device_probe_hear_fold0",
+  "representation": "hear",
+  "fold": "0",
+  "seed": 42,
+  "n_train": 31590,
+  "n_test": 8006,
+  "n_test_subjects": 9,
+  "balanced_accuracy": 0.9963777167124657,
+  "auroc": 0.9999297304438609,
+  "subject_level_accuracy_ci95_low": 0.991573694502172,
+  "subject_level_accuracy_ci95_high": 0.9987323504153726,
+  "per_subject_accuracy": {
+    "01": 0.9925373134328358,
+    "04": 1.0,
+    "14": 1.0,
+    "15": 1.0,
+    "20": 0.9955268389662028,
+    "31": 0.9811715481171548,
+    "37": 0.9960526315789474,
+    "41": 0.9970588235294118,
+    "49": 0.9991482112436116
+  },
+  "status": "complete"
+}

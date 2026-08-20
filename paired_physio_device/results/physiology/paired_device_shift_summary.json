@@ -1,0 +1,81 @@
+{
+  "n_pairs_sampled": 450,
+  "n_pairs_processed": 450,
+  "n_errors": 0,
+  "window_level": {
+    "post_norm_rms": {
+      "mean_R": 0.13908367116334366,
+      "mean_S": 0.16225534684217674,
+      "mannwhitney_p": 6.810612826852296e-07,
+      "cliffs_delta": -0.191279012345679,
+      "note": "window-level (pair-level), NOT subject-level -- see subject_level_paired_test for the inferential claim"
+    },
+    "spectral_centroid": {
+      "mean_R": 988.4498455581632,
+      "mean_S": 431.3148431339772,
+      "mannwhitney_p": 3.668287931980046e-147,
+      "cliffs_delta": 0.9949135802469136,
+      "note": "window-level (pair-level), NOT subject-level -- see subject_level_paired_test for the inferential claim"
+    },
+    "spectral_bandwidth": {
+      "mean_R": 1004.8896348259088,
+      "mean_S": 681.5711912092573,
+      "mannwhitney_p": 6.0374377426591894e-146,
+      "cliffs_delta": 0.9907358024691358,
+      "note": "window-level (pair-level), NOT subject-level -- see subject_level_paired_test for the inferential claim"
+    },
+    "spectral_rolloff": {
+      "mean_R": 2161.816847821732,
+      "mean_S": 800.1923879054856,
+      "mannwhitney_p": 8.736956416243601e-148,
+      "cliffs_delta": 0.9970469135802469,
+      "note": "window-level (pair-level), NOT subject-level -- see subject_level_paired_test for the inferential claim"
+    },
+    "zcr": {
+      "mean_R": 0.07463380181105911,
+      "mean_S": 0.02152893764828153,
+      "mannwhitney_p": 1.0868358877587968e-139,
+      "cliffs_delta": 0.9689679012345679,
+      "note": "window-level (pair-level), NOT subject-level -- see subject_level_paired_test for the inferential claim"
+    },
+    "spectral_flatness": {
+      "mean_R": 0.00018465758941601962,
+      "mean_S": 2.062484542774554e-05,
+      "mannwhitney_p": 6.575633525791918e-147,
+      "cliffs_delta": 0.9940444444444444,
+      "note": "window-level (pair-level), NOT subject-level -- see subject_level_paired_test for the inferential claim"
+    }
+  },
+  "subject_level_paired_test": {
+    "post_norm_rms": {
+      "n_subjects": 40,
+      "mean_paired_diff_R_minus_S": -0.020533459149473948,
+      "wilcoxon_p_subject_level": 3.8751750253140926e-07
+    },
+    "spectral_centroid": {
+      "n_subjects": 40,
+      "mean_paired_diff_R_minus_S": 587.5227052032569,
+      "wilcoxon_p_subject_level": 1.8189894035458565e-12
+    },
+    "spectral_bandwidth": {
+      "n_subjects": 40,
+      "mean_paired_diff_R_minus_S": 348.01339738538246,
+      "wilcoxon_p_subject_level": 1.8189894035458565e-12
+    },
+    "spectral_rolloff": {
+      "n_subjects": 40,
+      "mean_paired_diff_R_minus_S": 1426.5263519095993,
+      "wilcoxon_p_subject_level": 1.8189894035458565e-12
+    },
+    "zcr": {
+      "n_subjects": 40,
+      "mean_paired_diff_R_minus_S": 0.05539149137341676,
+      "wilcoxon_p_subject_level": 1.8189894035458565e-12
+    },
+    "spectral_flatness": {
+      "n_subjects": 40,
+      "mean_paired_diff_R_minus_S": 0.00017417180338919917,
+      "wilcoxon_p_subject_level": 1.8189894035458565e-12
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "python": "3.12.13",
+  "torch": "2.6.0+cu124",
+  "cuda_available": true,
+  "cuda_runtime": "12.4",
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition MIG 1g.24gb",
+  "transformers": "4.45.2",
+  "scikit_learn": "1.5.2"
+}

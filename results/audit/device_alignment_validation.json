@@ -1,0 +1,12 @@
+{
+  "subjects": 43,
+  "analysis_window_seconds_per_subject": 300,
+  "lag_search_range_seconds": 120,
+  "envelope_frame_seconds": 0.1,
+  "median_best_lag_sec": -0.8,
+  "max_absolute_best_lag_sec": 90.60000000000001,
+  "subjects_with_abs_lag_le_1_sec": 18,
+  "subjects_with_abs_lag_le_5_sec": 29,
+  "median_best_envelope_correlation": 0.819754119338564,
+  "note": "Diagnostic only; no alignment transform is learned or applied."
+}

@@ -1,0 +1,31 @@
+{
+  "P0_device_gap": {
+    "completed_fold_runs": 331,
+    "expected_fold_runs": 680
+  },
+  "P0_ablation": {
+    "completed_fold_runs": 0,
+    "expected_fold_runs": 60
+  },
+  "P1_preprocessing": {
+    "completed_fold_runs": 0,
+    "expected_fold_runs": 80
+  },
+  "P1_dimension_control": {
+    "completed_fold_runs": 0,
+    "expected_fold_runs": 30
+  },
+  "P1_domain_adaptation": {
+    "completed_fold_runs": 0,
+    "expected_fold_runs": 30
+  },
+  "P0_statistics": {
+    "complete": false
+  },
+  "P0_efficiency": {
+    "complete": false
+  },
+  "P1_device_acoustics": {
+    "complete": true
+  }
+}

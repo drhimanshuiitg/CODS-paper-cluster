@@ -1,0 +1,31 @@
+# Dataset and large derived artifacts -- regenerate on the target machine,
+# never version-controlled. See paired_physio_device/README_SETUP.md.
+cached_features/
+cached_features_quarantine_unaligned/
+checkpoints/
+paired_physio_device/checkpoints/
+.venv/
+
+# Raw run logs -- large, regenerable, not needed to reproduce the pipeline
+logs/
+paired_physio_device/logs/
+
+# Bulk experiment result artifacts (470MB) -- the small summary tables that
+# matter (MASTER_RESULTS.csv, evidence tables) live in ara/ and
+# Q1_Paper_Artifact/, which ARE version-controlled. Raw per-run completion
+# JSONs under results/ are regenerable by re-running the pipeline.
+results/*/runs/
+results/*/*_pre_dedup_fix_archive*/
+results/*/confusion_matrices/
+results/*/roc_curves/
+
+# Runtime/scratch files
+paired_physio_device/logs/.watch_resource_cache
+__pycache__/
+*.pyc
+.cache/
+*.egg-info/
+
+# Editor/OS cruft
+.DS_Store
+*.swp

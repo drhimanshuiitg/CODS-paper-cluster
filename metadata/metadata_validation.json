@@ -1,0 +1,23 @@
+{
+  "valid": true,
+  "errors": [],
+  "paired_subjects": 43,
+  "manifest_rows": 44348,
+  "logical_windows": 22174,
+  "positive_rows": 22174,
+  "negative_rows": 22174,
+  "fold_subject_counts": {
+    "0": 8,
+    "1": 8,
+    "2": 9,
+    "3": 9,
+    "4": 9
+  },
+  "fold_positive_window_counts": {
+    "0": 2212,
+    "1": 2202,
+    "2": 2231,
+    "3": 2201,
+    "4": 2241
+  }
+}

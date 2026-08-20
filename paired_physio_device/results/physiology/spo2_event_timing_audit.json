@@ -1,0 +1,42 @@
+{
+  "search_window_sec": 150,
+  "baseline_window_sec": 100,
+  "n_events_total": 9935,
+  "n_skipped": 949,
+  "by_event_type": {
+    "hypo": {
+      "n": 6039,
+      "delay_to_nadir_sec": {
+        "mean": 52.92449080973671,
+        "median": 41.0,
+        "p10": 0.0,
+        "p90": 128.0,
+        "p95": 140.0
+      },
+      "amplitude_pct": {
+        "mean": 6.817353866534194,
+        "median": 4.0,
+        "p90": 18.0,
+        "fraction_ge_3pct": 0.6761053154495777
+      },
+      "fraction_hit_search_boundary": 0.009107468123861567
+    },
+    "osa": {
+      "n": 2947,
+      "delay_to_nadir_sec": {
+        "mean": 59.5938242280285,
+        "median": 53.0,
+        "p10": 0.0,
+        "p90": 130.0,
+        "p95": 141.0
+      },
+      "amplitude_pct": {
+        "mean": 11.876484560570072,
+        "median": 9.0,
+        "p90": 26.0,
+        "fraction_ge_3pct": 0.8428910756701731
+      },
+      "fraction_hit_search_boundary": 0.007465218866644045
+    }
+  }
+}

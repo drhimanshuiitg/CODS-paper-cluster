@@ -1,0 +1,24 @@
+{
+  "experiment_id": "device_probe_hubert_fold4",
+  "representation": "hubert",
+  "fold": "4",
+  "seed": 42,
+  "n_train": 31858,
+  "n_test": 7738,
+  "n_test_subjects": 8,
+  "balanced_accuracy": 0.9751873869216852,
+  "auroc": 0.9973095352505059,
+  "subject_level_accuracy_ci95_low": 0.9621612237791384,
+  "subject_level_accuracy_ci95_high": 0.9853772433530839,
+  "per_subject_accuracy": {
+    "07": 0.9434782608695652,
+    "13": 0.9967741935483871,
+    "19": 0.9826989619377162,
+    "30": 0.9741980474198048,
+    "36": 0.9925925925925926,
+    "42": 0.9576023391812866,
+    "44": 0.9681697612732095,
+    "45": 0.9792176039119804
+  },
+  "status": "complete"
+}

@@ -1,0 +1,79 @@
+strategy_source: /home/pkdas/IEEE_healthcomm_workshop/Sleep_QuadNet_Workshop_Experiment_Plan.md
+base_config: /home/pkdas/IEEE_healthcomm_workshop/configs/base.yaml
+manifest: /home/pkdas/IEEE_healthcomm_workshop/metadata/dataset_manifest_aligned.csv
+folds: /home/pkdas/IEEE_healthcomm_workshop/metadata/subject_folds_5cv_aligned.csv
+seed: 42
+
+phase1_gate:
+  representation: classical
+  classifier: svm_rbf
+  protocols: [R_R, S_S, R_S, S_R]
+  folds: [0, 1, 2, 3, 4]
+  validator: scripts/validate_phase1_baseline.py
+
+P0_device_gap:
+  representations: [classical, hubert, wavlm, wav2vec2, data2vec_audio, data2vec_spectrogram, data2vec_fusion, full_fusion]
+  classifiers: [random_forest, xgboost, svm_rbf, mlp]
+  protocols: [R_R, S_S, R_S, S_R]
+  combined_protocol:
+    protocol: RS_RS
+    classifier: validation_selected_primary
+
+P0_ablation:
+  stage1_classifier: svm_rbf
+  stage1_protocols: [R_S, S_R]
+  representations:
+    - hubert
+    - wavlm
+    - wav2vec2
+    - data2vec_audio
+    - data2vec_spectrogram
+    - data2vec_fusion
+    - full_fusion
+    - full_minus_hubert
+    - full_minus_wavlm
+    - full_minus_wav2vec2
+    - full_minus_data2vec_audio
+    - full_minus_data2vec_spectrogram
+    - full_minus_data2vec
+  stage2: validation_selected_top3_all_classifiers
+
+P0_statistics:
+  unit: subject
+  bootstrap_iterations: 2000
+  metrics: [f1, balanced_accuracy, roc_auc, mcc]
+
+P0_efficiency:
+  timed_clips: 20
+  warmup_clips: 3
+  batch_size: 1
+  representations: [classical, hubert, wavlm, wav2vec2, data2vec_audio, data2vec_spectrogram, data2vec_fusion, full_fusion]
+
+P1_device_acoustics:
+  paired_only: true
+  sample_rate_hz: 16000
+  native_information_nyquist_hz: 4000
+  analysis_nyquist_hz: 8000
+
+P1_preprocessing:
+  representation: classical
+  classifier: svm_rbf
+  variants: [raw, peak, filter, peak_filter]
+
+P1_dimension_control:
+  representation: full_fusion
+  classifier: svm_rbf
+  pca_dimensions: [1536, 768, 384]
+  pca_fit_scope: train_only_for_tuning_train_plus_validation_for_refit
+
+P1_domain_adaptation:
+  method: CORAL
+  classifier: svm_rbf
+  representations: [validation_selected_best_single, data2vec_fusion, full_fusion]
+  protocols: [R_S, S_R]
+  target_reference: unlabeled_target_device_validation_subjects
+  test_features_used_for_alignment: false
+
+optional_P2:
+  enabled: false
+  reason: reviewer_critical_experiments_must_complete_first

@@ -1,0 +1,138 @@
+# Lightweight device-aware sleep-apnea benchmark configuration
+# Run:
+#   python device_robust_sleep_apnea_experiments_v4.py --config config_device_robust_v4.yaml
+
+seed: 42
+output_dir: /kaggle/working/device_robust_outputs_v4
+
+# -------------------------------------------------------------------------
+# 1) DATASETS
+# Update these paths according to your Kaggle dataset mount.
+# -------------------------------------------------------------------------
+datasets:
+  devices:
+    recorder:
+      root_dir: /kaggle/input/datasets/rkeyaru/recorder-data/Extracted_Clips_Balanced_Recorder
+      file_glob: "**/*.wav"
+      patient_id:
+        mode: parent
+    smartphone:
+      root_dir: /kaggle/input/datasets/rkeyaru/smartphone-data/Extracted_Clips_Balanced_Smartphone
+      file_glob: "**/*.wav"
+      patient_id:
+        mode: parent
+
+labels:
+  normal_keywords: ["normal"]
+  apnea_keywords: ["osa", "csa", "msa", "mixed", "hypo", "apnea"]
+
+patient_id:
+  mode: parent
+
+dataset:
+  compute_duration: false
+
+# -------------------------------------------------------------------------
+# 2) AUDIO + SPECTROGRAM PREPROCESSING
+# -------------------------------------------------------------------------
+audio:
+  target_sr: 16000
+  normalize: true
+  max_seconds: null      # set 10/20/30 only if clips are too long for GPU memory
+
+spectrogram:
+  n_mels: 128
+  n_fft: 1024
+  hop_length: 256
+  fmax: 8000
+  cmap: magma
+
+# -------------------------------------------------------------------------
+# 3) CACHING
+# The runner extracts each required feature once and reuses it across classifiers
+# and protocols. Data2Vec is cached as ONE fused audio+spectrogram vector.
+# -------------------------------------------------------------------------
+cache:
+  enabled: true
+  matrix_cache: true
+
+hf:
+  use_gpu: true
+  batch_size: 4
+  use_amp: true
+  data_parallel: true
+  local_files_only: false
+
+# -------------------------------------------------------------------------
+# 4) EXPERIMENTS
+# Default is your main focus: train/test on recorder using patient-wise group split.
+# To support device robustness later, uncomment the other protocols.
+# -------------------------------------------------------------------------
+split:
+  test_size: 0.25
+  strict_patient_disjoint_cross_device: false
+
+run:
+  experiments:
+    - in_domain_recorder
+    # - in_domain_smartphone
+    # - cross_recorder_to_smartphone
+    # - cross_smartphone_to_recorder
+    # - combined_device_group_split
+
+  # Keep original comparison style. No automatic heavy combinations.
+  # data2vec = raw audio Data2Vec branch + Mel-spectrogram Data2Vec-Vision branch,
+  # concatenated internally and reported as ONE Data2Vec representation.
+  # ssl_fusion = Wav2Vec2 + HuBERT + WavLM + Data2Vec.
+  # Classical is kept as a handcrafted baseline only; it is NOT inside ssl_fusion.
+  representations:
+    - classical
+    - wav2vec2
+    - hubert
+    - wavlm
+    - data2vec
+    - ssl_fusion
+
+  classifiers:
+    - random_forest
+    - xgboost
+    - svm_rbf
+    - mlp
+
+# -------------------------------------------------------------------------
+# 5) CLASSIFIER SETTINGS
+# These are close to your original scripts, with class balancing where useful.
+# -------------------------------------------------------------------------
+classifiers:
+  random_forest:
+    n_estimators: 300
+    max_depth: null
+    class_weight: balanced
+    n_jobs: -1
+  xgboost:
+    n_estimators: 300
+    max_depth: 4
+    learning_rate: 0.05
+    subsample: 0.9
+    colsample_bytree: 0.9
+    n_jobs: -1
+  svm_rbf:
+    C: 1.0
+    gamma: scale
+    probability: true
+    class_weight: balanced
+  mlp:
+    hidden_layer_sizes: [256, 128]
+    max_iter: 400
+    alpha: 0.0001
+    early_stopping: true
+
+# -------------------------------------------------------------------------
+# 6) EVALUATION AND PLOTS
+# -------------------------------------------------------------------------
+evaluation:
+  report_by_device: true
+
+plots:
+  tsne:
+    enabled: false

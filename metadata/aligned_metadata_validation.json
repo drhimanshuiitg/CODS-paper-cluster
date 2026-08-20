@@ -1,0 +1,31 @@
+{
+  "valid": true,
+  "alignment_uses_labels": false,
+  "usable_paired_subjects": 41,
+  "excluded_alignment_subjects": [
+    "34",
+    "35"
+  ],
+  "excluded_out_of_aligned_coverage_logical_windows": 926,
+  "manifest_rows": 39596,
+  "logical_windows": 19798,
+  "positive_rows": 19870,
+  "negative_rows": 19726,
+  "fold_subject_counts": {
+    "0": 9,
+    "1": 8,
+    "2": 8,
+    "3": 8,
+    "4": 8
+  },
+  "fold_positive_window_counts": {
+    "0": 1975,
+    "1": 2009,
+    "2": 1992,
+    "3": 1977,
+    "4": 1982
+  },
+  "reference_clock": "Smartphone/annotation seconds",
+  "recorder_mapping": "piecewise-linear interpolation within continuous reliable unlabeled RMS-envelope lag-anchor segments",
+  "alignment_window_inclusion": "both reference endpoints must lie in one segment; segments split at anchor gaps >1800 s or adjacent lag changes >5 s; intervals between segments are excluded"
+}

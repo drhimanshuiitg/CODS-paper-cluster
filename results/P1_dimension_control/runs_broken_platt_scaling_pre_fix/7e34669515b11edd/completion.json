@@ -1,0 +1,124 @@
+{
+  "status": "complete",
+  "experiment_key": "7e34669515b11edd",
+  "run_id": "7e34669515b11edd",
+  "timestamp": "2026-08-18T15:06:57.128953+00:00",
+  "seed": 42,
+  "fold": 1,
+  "protocol": "R_S",
+  "representation": "full_fusion_pca_1536",
+  "base_representation": "full_fusion",
+  "classifier": "svm_rbf",
+  "selected_hyperparameters": {
+    "C": 10.0,
+    "gamma": "scale",
+    "probability": true,
+    "class_weight": "balanced",
+    "cache_size": 4096
+  },
+  "tuning": [
+    {
+      "candidate": 0,
+      "hyperparameters": {
+        "C": 1.0,
+        "gamma": "scale",
+        "probability": true,
+        "class_weight": "balanced",
+        "cache_size": 4096
+      },
+      "validation_balanced_accuracy": 0.49999771120958,
+      "fit_sec": 1264.6505947629921
+    },
+    {
+      "candidate": 1,
+      "hyperparameters": {
+        "C": 10.0,
+        "gamma": "scale",
+        "probability": true,
+        "class_weight": "balanced",
+        "cache_size": 4096
+      },
+      "validation_balanced_accuracy": 0.500241848854384,
+      "fit_sec": 1338.6295808297582
+    }
+  ],
+  "native_feature_dimension": 3840,
+  "feature_dimension": 1536,
+  "preprocessing": "peak",
+  "pca_fit_scope": "training subjects for tuning; training+validation subjects for refit; never test",
+  "subjects": {
+    "train_subjects": [
+      "01",
+      "04",
+      "07",
+      "09",
+      "13",
+      "14",
+      "15",
+      "19",
+      "20",
+      "27",
+      "28",
+      "30",
+      "31",
+      "32",
+      "33",
+      "36",
+      "37",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44",
+      "45",
+      "48",
+      "49"
+    ],
+    "val_subjects": [
+      "03",
+      "05",
+      "08",
+      "18",
+      "26",
+      "29",
+      "39",
+      "46"
+    ],
+    "test_subjects": [
+      "02",
+      "06",
+      "10",
+      "16",
+      "21",
+      "38",
+      "47",
+      "50"
+    ]
+  },
+  "metrics": {
+    "accuracy": 0.4964912280701754,
+    "balanced_accuracy": 0.5,
+    "precision": 0.0,
+    "sensitivity": 0.0,
+    "specificity": 1.0,
+    "f1": 0.0,
+    "macro_f1": 0.33177022274325907,
+    "mcc": 0.0,
+    "cohen_kappa": 0.0,
+    "roc_auc": 0.5267880856187539,
+    "tn": 1981,
+    "fp": 0,
+    "fn": 2009,
+    "tp": 0,
+    "n": 3990
+  },
+  "runtime": {
+    "total_fold_pca_and_classifier_sec": 6703.94052294828,
+    "classifier_refit_sec": 2342.5316863586195
+  },
+  "hardware": {
+    "host": "gpu01",
+    "platform": "Linux-6.12.0-124.8.1.el10_1.x86_64-x86_64-with-glibc2.39",
+    "slurm_job_id": "1455"
+  }
+}

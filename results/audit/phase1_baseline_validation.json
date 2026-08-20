@@ -1,0 +1,16 @@
+{
+  "valid": true,
+  "errors": [],
+  "completed_fold_runs": 20,
+  "expected_fold_runs": 20,
+  "protocols": [
+    "R_R",
+    "S_S",
+    "R_S",
+    "S_R"
+  ],
+  "folds": 5,
+  "representation": "classical",
+  "classifier": "svm_rbf",
+  "gate": "SSL extraction may launch only when valid=true"
+}

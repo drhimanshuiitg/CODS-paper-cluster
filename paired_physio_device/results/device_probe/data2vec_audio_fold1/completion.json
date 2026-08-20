@@ -1,0 +1,24 @@
+{
+  "experiment_id": "device_probe_data2vec_audio_fold1",
+  "representation": "data2vec_audio",
+  "fold": "1",
+  "seed": 42,
+  "n_train": 31616,
+  "n_test": 7980,
+  "n_test_subjects": 8,
+  "balanced_accuracy": 0.9141604010025062,
+  "auroc": 0.9757454098906414,
+  "subject_level_accuracy_ci95_low": 0.8325304097440933,
+  "subject_level_accuracy_ci95_high": 0.9917344785084389,
+  "per_subject_accuracy": {
+    "02": 0.5924764890282131,
+    "06": 0.9904371584699454,
+    "10": 0.9942129629629629,
+    "16": 0.9956896551724138,
+    "21": 0.9941176470588236,
+    "38": 0.9701195219123506,
+    "47": 0.9937810945273632,
+    "50": 0.9503510531594784
+  },
+  "status": "complete"
+}

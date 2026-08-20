@@ -1,0 +1,25 @@
+{
+  "experiment_id": "device_probe_wav2vec2_fold0",
+  "representation": "wav2vec2",
+  "fold": "0",
+  "seed": 42,
+  "n_train": 31590,
+  "n_test": 8006,
+  "n_test_subjects": 9,
+  "balanced_accuracy": 0.9942543092680489,
+  "auroc": 0.999262731317737,
+  "subject_level_accuracy_ci95_low": 0.9897474792928753,
+  "subject_level_accuracy_ci95_high": 0.9975631375820362,
+  "per_subject_accuracy": {
+    "01": 0.9850746268656716,
+    "04": 1.0,
+    "14": 0.9988399071925754,
+    "15": 1.0,
+    "20": 0.9950298210735586,
+    "31": 0.9853556485355649,
+    "37": 0.9881578947368421,
+    "41": 0.9921568627450981,
+    "49": 1.0
+  },
+  "status": "complete"
+}

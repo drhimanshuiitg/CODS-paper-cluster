@@ -1,0 +1,248 @@
+{
+  "artifact": "Sleep-QuadNet: Cross-Device Robustness Benchmark",
+  "artifact_dir": "/home/pkdas/IEEE_healthcomm_workshop/ara/",
+  "review_version": "3.0.0",
+  "prerequisite": "Level 1 passed",
+  "overall": {
+    "grade": "Weak Accept",
+    "mean_score": 3.67,
+    "one_line_summary": "A genuinely rigorous, honestly-negative-result-rich benchmark whose exploration trace is excellent, but whose headline superlative claims (C01, C08) are contradicted by their own cited evidence table once the near-identical companion representations are checked literally.",
+    "strengths_summary": [
+      "Exploration integrity is exceptional: 8 dead-end nodes with specific, non-formulaic failure_mode/lesson fields, real reversals documented (the ablation point-estimate correction, the corroboration-filter smoke-test reversal), and zero rebutted-branch contradictions between the tree and the claims.",
+      "Negative results (CORAL, HeAR, ODI/HB-as-feature, corroboration filtering) are reported with the same rigor as positive ones, each backed by a real paired-bootstrap significance test rather than a point estimate.",
+      "The PCA-fix narrative (C04/C05) is a model of good practice: root-caused via structural comparison to a working analogue (CORAL) in the same codebase, validated at scale with zero significant regressions, and explicitly reframed rather than just appended to the prior 'PCA fails' framing."
+    ],
+    "weaknesses_summary": [
+      "C01 and C08 both use unqualified superlative language ('higher than every one of the other 13', 'lowest of all 14 tested representations') that is literally contradicted by Table 1: hubert_odi_hb (0.5473) exceeds hubert (0.5466), and odi_hb (0.4958) is lower than hear (0.5040). Both claims' Interpretation fields correctly note the nuance, but the Statement field itself overclaims.",
+      "Four claims (C01, C02, C03, C08) rest on point estimates that have not been re-run through this project's own significance-testing methodology since three of the compared representations were added -- this is self-disclosed (G1) but still means roughly a third of the claim set is evidenced one tier below the project's own established standard.",
+      "CORAL (C06, 30 combinations, svm_rbf only, 3 representations) and PCA-fix (C05, 320 combinations, all 4 classifiers, 5 representations) are treated as directly comparable 'one technique worked, one didn't' findings despite a large, self-disclosed (G3) asymmetry in how thoroughly each was tested."
+    ],
+    "post_fix_note": "All 8 findings addressed 2026-08-19, same session as the review. F01/F02/F06/F07/F08 were direct text/structure fixes. F03 added a new, previously-missing significance test. F05's fix (refreshing significance testing to the full candidate set) surfaced a genuinely new, more important finding than the gap it closed: the project's own rigorous methodology selects wavlm_large, not hubert, as best single encoder, and finds full_fusion statistically indistinguishable from it -- this propagated into substantive revisions of C01, C02, C03, C08, and PAPER.md's claims_summary, and flagged that paper/conference_101719.tex has not yet been updated to match. F04 is a real, running GPU-job extension (jobs 1601/1602) of CORAL's classifier/representation coverage, confirmed progressing but not yet complete as of this update -- results/P1_domain_adaptation and C06 should be re-checked once those jobs finish."
+  },
+  "dimensions": {
+    "D1_evidence_relevance": {
+      "score": 3,
+      "strengths": [
+        "The core claims (C04/C05 PCA collapse-and-fix, C06 CORAL, C07 corroboration, C10 ablation) each cite a paired-bootstrap significance table that directly and substantively addresses the claim's comparative statement -- not just a topically-related result.",
+        "C09's theoretical-prediction framing (a per-subject-constant cannot add per-window signal) is unusually well-grounded: the claim states the prediction was made before testing, and evidence basis + tags reflect a genuinely confirmatory (not just observational) use of evidence."
+      ],
+      "weaknesses": [
+        "C01's Evidence basis (table1_main_benchmark_summary.md) actually shows hubert_odi_hb (0.5473) exceeding hubert (0.5466) -- the cited table does not support the literal Statement ('higher... than every one of the other 13 representations'); it only supports 'second-highest, and statistically indistinguishable from the highest.'",
+        "C08's Evidence basis likewise shows odi_hb (0.4958) below hear (0.5040) in the same table -- 'lowest of all 14 tested representations' is not what the cited table shows.",
+        "C09's specific sub-claim that hubert_odi_hb is 'statistically indistinguishable from HuBERT alone' has no cited paired-bootstrap test between exactly those two representations anywhere in evidence/ -- the only support is the point-estimate proximity (0.5473 vs 0.5466) plus a theoretical argument, not a direct significance test of that specific pair.",
+        "C06's specific quoted comparator ('56.5% uncorrected' for HuBERT S->R) is not independently reconstructable from any evidence/ table in this ARA -- Table 1 only reports the R_S+S_R combined 'cross' regime, not per-protocol breakdowns, so this number is inherited from the paper's prose rather than backed by a standalone raw table the ARA itself produced."
+      ],
+      "suggestions": [
+        "Rewrite C01's Statement to explicitly except hubert_odi_hb by name (mirroring how O3 in problem.md correctly names and excepts odi_hb), e.g. 'HuBERT alone achieves the highest cross-device balanced accuracy among representations that do not include a per-subject-constant severity feature; hubert_odi_hb is marginally higher (0.5473 vs 0.5466) but statistically indistinguishable by construction.'",
+        "Rewrite C08's Statement the same way with respect to odi_hb.",
+        "Add a small paired-bootstrap test specifically for hubert vs. hubert_odi_hb to make C09's 'statistically indistinguishable' claim directly evidenced rather than inferred.",
+        "Add a per-protocol (not just per-regime) breakdown table so C06's specific S->R comparator number is independently verifiable within the ARA rather than only in the external paper draft."
+      ]
+    },
+    "D2_falsifiability": {
+      "score": 4,
+      "strengths": [
+        "C01, C05, C07, C10, C11 all have genuinely actionable, forward-looking falsification criteria that name a specific metric, threshold, and data source an independent party could check without proprietary access.",
+        "C11's falsification criterion is well-scoped to its open/hypothesis status -- it specifies what a full, completed run would need to show to count as refuted, rather than hedging indefinitely."
+      ],
+      "weaknesses": [
+        "C04's falsification criterion ('re-inspection of results/P1_dimension_control's completion.json files showing balanced accuracy materially different from 0.500') is really a request to verify a static historical record, not a predictive test of a general hypothesis -- it can only meaningfully be run once, against archival data that will not change. This is philosophically weaker than the other claims' criteria, though the claim itself is scoped accordingly ('as originally implemented' / a specific past state)."
+      ],
+      "suggestions": [
+        "Consider distinguishing 'historical/archival' claims (C04) from 'general/predictive' claims (C01, C05, C10, C11) with a status sub-tag, so a reader doesn't apply the same falsifiability expectations to both kinds uniformly."
+      ]
+    },
+    "D3_scope_calibration": {
+      "score": 3,
+      "strengths": [
+        "problem.md's O3 correctly and explicitly names and excepts the odi_hb degenerate case when making its 'largest gap' superlative claim -- the right pattern, just not applied consistently downstream in claims.md.",
+        "Constraints.md is unusually explicit about what the ARA's findings do NOT cover (no external dataset, no fine-tuning, GPU-classifier numerical equivalence unverified, CORAL/PCA asymmetric scope) -- this is exactly the kind of generalization-boundary documentation this dimension rewards.",
+        "C11 is correctly scoped as 'OPEN, not yet supported' rather than being quietly folded into the supported-claims list despite 28/80 completed combinations already existing -- a real under-claiming discipline that resists the temptation to prematurely call a result."
+      ],
+      "weaknesses": [
+        "The C01/C08 superlative-overclaim pattern (see D1) is fundamentally a scope-calibration issue: the Statement field's scope (all 13/14 other representations) exceeds what the cited evidence supports once the near-identical or degenerate-by-construction companion representations are checked literally.",
+        "C06's Interpretation flags CORAL's narrower test scope (3 reps, 1 classifier) as a caveat, but the Statement itself ('across all 6 representation/direction combinations tested') is technically scope-accurate -- the risk is a reader conflating C05's broad, 320-combination-backed claim with C06's narrow, 30-combination-backed one as equally strong evidence for the paper's 'one worked, one didn't' framing, which the ARA itself flags as a concern in constraints.md G3 but does not resolve."
+      ],
+      "suggestions": [
+        "Apply the same 'name the exception explicitly' pattern from O3 to C01 and C08's Statement fields.",
+        "Consider adding a qualifier to C06's Statement itself (not just its Interpretation) noting the narrower test scope, so the Statement/Interpretation split doesn't require a reader to read both fields to get the accurate scope."
+      ]
+    },
+    "D4_argument_coherence": {
+      "score": 4,
+      "strengths": [
+        "The observation -> gap -> key insight -> solution chain in problem.md is unusually well-grounded: the Key Insight (technique failures can be scope artifacts, not fundamental limitations) traces directly and specifically to O5/O6/O7, and is then genuinely implemented in the architecture (the PCA/CORAL structural-parallel note in architecture.md) rather than asserted and dropped.",
+        "Every gap in problem.md (G1-G5) is either explicitly threaded into a claim's Interpretation/Status (G1->C01/C03/C08 caveats, G3->C06 caveat, G4->C11's open status) or explicitly and correctly left unaddressed as a genuinely open question (G5/RS_RS) rather than silently ignored.",
+        "No contradictions found between the exploration tree's rejected branches (dead_end nodes) and any claim's advocated position -- N08/N13/N16/N19/N21/N23/N26/N28/N31 are all consistently reflected in the corresponding claims' Status and Interpretation fields."
+      ],
+      "weaknesses": [
+        "C02 lists 'Dependencies: C10' and C10 lists 'Dependencies: C02' -- a mutual/circular-looking dependency pair. Reading both claims, the actual relationship is 'thematically mutually consistent with,' not a strict logical prerequisite in either direction (C02 is independently established by E01 alone; C10 is independently established by E02 alone). Using the Dependencies field for thematic consistency rather than genuine prerequisite structure could mislead a reader tracing the claim graph."
+      ],
+      "suggestions": [
+        "Either remove the C02<->C10 Dependencies entries (since neither is a logical prerequisite for the other) and instead note the thematic relationship only in each claim's Interpretation (which both already do), or introduce a distinct field/tag for 'thematically consistent with' vs. 'Dependencies' (logical prerequisite) so the claim graph's edges mean one consistent thing."
+      ]
+    },
+    "D5_exploration_integrity": {
+      "score": 5,
+      "strengths": [
+        "Dead-end nodes are specific and actionable, not formulaic: N08's failure_mode distinguishes a calibration/threshold collapse from a signal-content collapse via the ROC-AUC diagnostic (a genuinely non-obvious distinction), and N19's failure_mode identifies the exact wrong-then-right hypothesis sequence (float precision rejected, clock-drift confirmed) rather than just stating the final cause.",
+        "The tree documents a genuine methodological self-correction (N16->N17, the ablation point-estimate-only reading later corrected by a proper significance test) with an honest lesson ('this project's own established methodology... should have been applied... from the start rather than as a correction') -- this is a rare and valuable kind of honesty in a research trace, most artifacts would simply present the corrected version without the discarded one.",
+        "Decision nodes' 'alternatives' fields are genuine rejected options with real reasons (e.g. N09's alternative of 'trying a different dimensionality-reduction technique entirely' is a real path not taken, with a specific reason it was rejected), not strawmen constructed to make the chosen path look inevitable.",
+        "8 dead_end and 5 decision nodes across a 33-node tree is a healthy ratio -- this reads as genuine research process documentation, not post-hoc justification with a token failure or two added for appearance."
+      ],
+      "weaknesses": [
+        "N19's source_refs cites 'scripts/audit_spo2_corroboration.py, investigation notes' -- 'investigation notes' is not a locatable file or artifact, only a description of session history. This is honestly labeled as informal rather than passed off as a citable document, but it is the one source_ref in the tree that isn't independently locatable by a reader."
+      ],
+      "suggestions": [
+        "If any session transcript, log excerpt, or scratch file documenting the float-precision-then-clock-drift investigation for N19 survives anywhere in the project, point source_refs at that specific artifact instead of the generic phrase 'investigation notes.'"
+      ]
+    },
+    "D6_methodological_rigor": {
+      "score": 3,
+      "strengths": [
+        "Every comparative claim that has significance-testing infrastructure available (C05, C06, C07, C10) uses it correctly: same paired-bootstrap method, same 2000-iteration count, same subject-level (not window-level) resampling that correctly accounts for within-subject error correlation, and a consistent CI-excludes-zero significance criterion applied uniformly rather than cherry-picked per comparison.",
+        "The corroboration-filter ablation (E06) explicitly reports that an earlier single-fold smoke test's promising result did not replicate at full scale -- a textbook example of not over-trusting a small pilot result, and it is reported as a finding in its own right (N21/H-adjacent) rather than quietly discarded.",
+        "GPU-only enforcement (H03) is validated empirically, not just asserted: the ARA documents two real incidents where the hard-fail guard caught a genuine silent-fallback bug, which is unusually strong reproducibility/rigor evidence for an infrastructure-level design choice."
+      ],
+      "weaknesses": [
+        "C01/C02/C03/C08 -- 4 of 11 claims, including the ARA's single most central finding (C01) -- rely on point estimates not yet re-verified through this project's own significance-testing methodology against the current 14-representation set (self-disclosed as G1). This is a real gap in the project's own stated evidentiary standard, applied inconsistently across its claim set.",
+        "CORAL (E05/C06) tests only 3 of 14 representations and only 1 of 4 classifiers, while the PCA-fix comparison it's rhetorically paired against (E04/C05) tests 5 representations and all 4 classifiers -- the paper's 'PCA fixable, CORAL not' narrative rests on evidentiary bases of very different strength, a real asymmetry self-disclosed in constraints.md (G3) but not yet resolved by extending CORAL's coverage.",
+        "E09 (sliding-window severity) has no baseline defined beyond implicit chance level, and its 28/80-combination partial table has no variance/CI reporting across the folds shown -- reasonable for a genuinely in-progress experiment, but means C11 currently has weaker methodological backing than any other claim in the set (appropriately reflected in its 'hypothesis, not yet supported' status)."
+      ],
+      "suggestions": [
+        "Re-run results/P0_statistics-equivalent significance testing against the full current 14-representation set before treating C01/C02/C03/C08 as equal in evidentiary strength to C05/C06/C07/C10 in any downstream publication.",
+        "Extend CORAL to the same representation x classifier grid PCA-fix now covers before presenting the two as a matched pair of 'one technique worked, one didn't' findings.",
+        "Once E09 completes, define an explicit non-chance baseline (e.g. the classical/DSP-feature floor already used in E01) so C11's eventual claim has the same baseline-comparison structure as the rest of the claim set."
+      ]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F01",
+      "dimension": "D1_evidence_relevance",
+      "severity": "major",
+      "target_file": "logic/claims.md",
+      "target_entity": "C01",
+      "evidence_span": "A single frozen HuBERT encoder (768-D) achieves higher mean cross-device balanced accuracy (0.5466) than every one of the other 13 representations tested in the main benchmark, including all multi-encoder fusions.",
+      "observation": "Table 1 (evidence/tables/table1_main_benchmark_summary.md), the claim's own cited Evidence basis, shows hubert_odi_hb at cross-device balanced accuracy 0.5473 -- higher than hubert's 0.5466 -- directly contradicting the Statement's 'higher than every one of the other 13' assertion.",
+      "reasoning": "This is this ARA's single most central claim (it opens claims_summary in PAPER.md's frontmatter and anchors C02/C03/C08's framing), so its literal Statement being contradicted by its own cited table is a scope-calibration failure at the highest-stakes point in the artifact. The Interpretation field does correctly note hubert_odi_hb's statistical indistinguishability, but a reader who checks only the Statement against the table (the expected verification path) will find a direct contradiction.",
+      "suggestion": "Rewrite the Statement to explicitly except hubert_odi_hb by name and explain why (per-subject-constant addition, not a real competing representation), mirroring how problem.md's O3 correctly names and excepts odi_hb in its own superlative claim.",
+      "outcome": "fixed",
+      "outcome_note": "C01 Statement rewritten to explicitly except hubert_odi_hb by name; further superseded by a full revision after F05's re-analysis."
+    },
+    {
+      "finding_id": "F02",
+      "dimension": "D1_evidence_relevance",
+      "severity": "major",
+      "target_file": "logic/claims.md",
+      "target_entity": "C08",
+      "evidence_span": "HeAR alone achieves cross-device balanced accuracy 0.5040 (lowest of all 14 tested representations, closest to the 0.50 chance floor)",
+      "observation": "The same Table 1 shows odi_hb at cross-device balanced accuracy 0.4958 -- lower than HeAR's 0.5040 -- directly contradicting 'lowest of all 14 tested representations.'",
+      "reasoning": "Same class of error as F01: the intended comparison (lowest among representations that are meant to carry real per-window signal) is reasonable, but odi_hb is a deliberately degenerate baseline (per C09, chance-level by construction) and excluding it needs to be stated, not assumed.",
+      "suggestion": "Rewrite to 'lowest of all real (non-chance-baseline) representations tested' or explicitly name odi_hb as the excepted degenerate case, consistent with the F01 fix.",
+      "outcome": "fixed",
+      "outcome_note": "C08 Statement rewritten to explicitly except odi_hb by name."
+    },
+    {
+      "finding_id": "F03",
+      "dimension": "D1_evidence_relevance",
+      "severity": "minor",
+      "target_file": "logic/claims.md",
+      "target_entity": "C09",
+      "evidence_span": "`hubert_odi_hb` (HuBERT + ODI/HB concatenated) is statistically indistinguishable from HuBERT alone (0.5473 vs. 0.5466 cross-device)",
+      "observation": "No paired-bootstrap significance test between hubert and hubert_odi_hb specifically appears anywhere in evidence/ -- the 'statistically indistinguishable' language is not backed by a cited significance result, only by point-estimate proximity plus a theoretical argument.",
+      "reasoning": "The theoretical argument (a per-subject constant cannot add per-window signal) is sound and independently valuable, but 'statistically indistinguishable' is a specific empirical claim that implies a hypothesis test was run; none is cited.",
+      "suggestion": "Either run the paired bootstrap for this specific pair and cite it, or soften the language to 'numerically near-identical, consistent with the theoretical prediction that a per-subject constant cannot add per-window signal' without the word 'statistically.'",
+      "outcome": "fixed",
+      "outcome_note": "Real paired-bootstrap test run (scripts/run_hubert_odi_hb_significance.py); C09 updated with the actual result (7/8 non-significant, 1 marginal exception) instead of unbacked language."
+    },
+    {
+      "finding_id": "F04",
+      "dimension": "D6_methodological_rigor",
+      "severity": "major",
+      "target_file": "logic/solution/constraints.md",
+      "target_entity": "G3",
+      "evidence_span": "CORAL's scope (G3) is narrower than PCA's post-fix scope -- 3 representations x 1 classifier vs. PCA's 5 representations x 4 classifiers -- so C06 (CORAL fails) is evidenced less broadly than C05 (PCA fix works).",
+      "observation": "This asymmetry is self-disclosed but not resolved -- the paper-facing narrative (per PAPER.md's claims_summary and C05/C06's juxtaposition) presents PCA-fixable / CORAL-not-fixable as a clean two-technique comparison despite the two techniques being tested at very different scales.",
+      "reasoning": "A reader of the eventual paper is likely to treat C05 and C06 as symmetric, equally-weighted findings ('we tried two things, one worked, one didn't') when their evidentiary bases differ by roughly 10x in combination count and 4x in classifier coverage. This doesn't invalidate C06 but does mean its generalization beyond svm_rbf and the 3 tested representations is unverified.",
+      "suggestion": "Extend CORAL to the same 4-classifier, broader-representation grid before finalizing the paper's comparative framing, or explicitly caveat the comparison's asymmetric evidentiary weight in the paper text itself, not just in this ARA's constraints.md.",
+      "outcome": "fixed",
+      "outcome_note": "run_coral.py's --classifier flag added; CORAL extended to mlp/random_forest/xgboost across data2vec_fusion/full_fusion/hubert/wavlm_large (jobs 1601/1602, confirmed progressing)."
+    },
+    {
+      "finding_id": "F05",
+      "dimension": "D6_methodological_rigor",
+      "severity": "minor",
+      "target_file": "logic/problem.md",
+      "target_entity": "G1",
+      "evidence_span": "Any claim in this ARA phrased as \"X has the highest point estimate\" (rather than \"X is significantly higher\") for a representation not in {hubert, wavlm, wav2vec2, data2vec_audio, data2vec_spectrogram, full_fusion, data2vec_fusion}... should be read as a point-estimate-only finding until re-tested.",
+      "observation": "C01 (this ARA's headline claim) is exactly this case -- its comparison set includes wavlm_large, hear, and full_fusion_plus_hear, none of which were part of the last significance-testing run.",
+      "reasoning": "The gap is honestly disclosed, which is good practice, but it means the artifact's single most prominent claim is currently evidenced one tier below the project's own established rigor standard (paired bootstrap with CI), applied to every other major claim in the set.",
+      "suggestion": "Re-run scripts/run_statistics.py (or an updated equivalent) with the full current 14-representation candidate list before treating C01 as equally strong evidence to C05/C10 in any external-facing document.",
+      "outcome": "fixed",
+      "outcome_note": "scripts/run_statistics.py's candidate_singles/principal lists extended to the full 14-representation set and re-run as results/P0_statistics_v2 -- this changed the answer (wavlm_large, not hubert, is validation-selected best; full_fusion vs. best-single is not significant), triggering substantive revisions to C01, C02, C03, C08, not just a bookkeeping close of G1."
+    },
+    {
+      "finding_id": "F06",
+      "dimension": "D4_argument_coherence",
+      "severity": "minor",
+      "target_file": "logic/claims.md",
+      "target_entity": "C02, C10",
+      "evidence_span": "C02 Dependencies: C10 / C10 Dependencies: C02",
+      "observation": "The two claims list each other as Dependencies, forming a circular reference in the claim graph.",
+      "reasoning": "Neither claim is actually a logical prerequisite for the other -- C02 (fusion underperforms HuBERT) is established directly by E01; C10 (ablation shows redundancy) is established directly by E02. The relationship both Interpretation fields describe is thematic consistency, not dependency.",
+      "suggestion": "Remove the circular Dependencies entries and rely on each claim's existing Interpretation field to note the thematic relationship, or introduce a separate 'related claims' field distinct from 'Dependencies' so the latter only ever encodes genuine logical prerequisites.",
+      "outcome": "fixed",
+      "outcome_note": "Circular C02<->C10 Dependencies entries removed; relationship kept in Interpretation only as 'thematically consistent with', not a logical prerequisite."
+    },
+    {
+      "finding_id": "F07",
+      "dimension": "D2_falsifiability",
+      "severity": "suggestion",
+      "target_file": "logic/claims.md",
+      "target_entity": "C04",
+      "evidence_span": "**Falsification criteria**: re-inspection of `results/P1_dimension_control`'s completion.json files showing balanced accuracy materially different from 0.500 in those combinations.",
+      "observation": "This criterion is a request to re-verify a static, archival fact rather than a predictive test of a general hypothesis -- it can only be meaningfully evaluated once, since the underlying pre-fix result files are historical and will not change.",
+      "reasoning": "Not wrong, but a philosophically different (weaker) kind of falsifiability than C01/C05/C10/C11's forward-looking criteria, which describe what a new or repeated experiment would need to show.",
+      "suggestion": "No change strictly required, but consider a status tag distinguishing 'historical/archival' claims from 'general/predictive' ones so readers calibrate their expectations of the falsification criterion's strength accordingly.",
+      "outcome": "fixed",
+      "outcome_note": "C04's falsification criteria annotated as historical/archival rather than predictive; historical-claim tag added."
+    },
+    {
+      "finding_id": "F08",
+      "dimension": "D5_exploration_integrity",
+      "severity": "suggestion",
+      "target_file": "trace/exploration_tree.yaml",
+      "target_entity": "N19",
+      "evidence_span": "source_refs: [\"scripts/audit_spo2_corroboration.py, investigation notes\"]",
+      "observation": "\"investigation notes\" is not an independently locatable artifact, unlike every other explicit node's source_refs, which point to real files or result directories.",
+      "reasoning": "Minor inconsistency in citation quality within an otherwise very strong exploration tree; does not affect the substance of the (well-documented) finding itself.",
+      "suggestion": "If any surviving log, transcript excerpt, or scratch file documents the float-precision-then-clock-drift investigation, cite that specific artifact instead.",
+      "outcome": "fixed",
+      "outcome_note": "N19's source_refs now cites the real, locatable module docstring (scripts/build_window_corroboration.py:6-19) instead of the generic 'investigation notes'."
+    }
+  ],
+  "questions_for_authors": [
+    "Given that C01 (the headline finding) and C08 (the HeAR negative result) both use superlative language contradicted by their own cited table once hubert_odi_hb and odi_hb are checked literally, was this an oversight in phrasing, or is there an implicit convention (e.g. 'the 13/14 real, non-degenerate representations') that should be made explicit project-wide?",
+    "Is there a plan to extend CORAL (E05) to the same classifier/representation grid PCA-fix (E04) now covers, given the paper's narrative treats them as a directly comparable pair?",
+    "For C09's 'statistically indistinguishable' language about hubert vs. hubert_odi_hb -- was a direct paired-bootstrap test between exactly this pair run anywhere and just not carried into the evidence tables, or does the claim rest entirely on the theoretical argument plus point-estimate proximity?",
+    "Now that the ablation's point-estimate-only reading (N16) was caught and corrected via proper significance testing (N17), is there a plan to apply the same corrective pass to C01/C02/C03/C08's point estimates against the full current representation set, closing G1?"
+  ],
+  "read_order": [
+    "PAPER.md",
+    "logic/claims.md",
+    "logic/experiments.md",
+    "logic/problem.md",
+    "logic/concepts.md",
+    "logic/solution/architecture.md",
+    "logic/solution/algorithm.md",
+    "logic/solution/constraints.md",
+    "logic/solution/heuristics.md",
+    "logic/related_work.md",
+    "trace/exploration_tree.yaml",
+    "evidence/README.md",
+    "evidence/tables/table1_main_benchmark_summary.md",
+    "evidence/tables/table3_sliding_window_severity_partial.md",
+    "evidence/tables/table5_coral_results.md"
+  ]
+}

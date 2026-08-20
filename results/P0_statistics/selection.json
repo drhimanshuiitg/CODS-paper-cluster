@@ -1,0 +1,6 @@
+{
+  "primary_classifier": "svm_rbf",
+  "best_single_encoder": "hubert",
+  "selection_basis": "mean cross-device validation balanced accuracy",
+  "seed": 42
+}

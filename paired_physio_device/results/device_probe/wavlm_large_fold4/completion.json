@@ -1,0 +1,24 @@
+{
+  "experiment_id": "device_probe_wavlm_large_fold4",
+  "representation": "wavlm_large",
+  "fold": "4",
+  "seed": 42,
+  "n_train": 31858,
+  "n_test": 7738,
+  "n_test_subjects": 8,
+  "balanced_accuracy": 0.9869475316619282,
+  "auroc": 0.9993344316358145,
+  "subject_level_accuracy_ci95_low": 0.97073873652844,
+  "subject_level_accuracy_ci95_high": 0.9932159866408083,
+  "per_subject_accuracy": {
+    "07": 0.9478260869565217,
+    "13": 1.0,
+    "19": 0.9913494809688581,
+    "30": 0.9846582984658299,
+    "36": 0.9944444444444445,
+    "42": 0.9839181286549707,
+    "44": 0.9681697612732095,
+    "45": 0.9951100244498777
+  },
+  "status": "complete"
+}

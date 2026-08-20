@@ -1,0 +1,9 @@
+representation,feature_dimension,encoder_branches,cached_feature_size_bytes
+classical,52,1,8236096
+hubert,768,1,121639040
+wavlm,768,1,121639040
+wav2vec2,768,1,121639040
+data2vec_audio,768,1,121639040
+data2vec_spectrogram,768,1,121639040
+data2vec_fusion,1536,2,243278080
+full_fusion,3840,5,608195200

@@ -1,0 +1,9 @@
+{
+  "primary_classifier": "svm_rbf",
+  "top3_representations": [
+    "full_minus_wav2vec2",
+    "hubert",
+    "full_minus_data2vec_audio"
+  ],
+  "selection_basis": "mean cross-device validation balanced accuracy"
+}

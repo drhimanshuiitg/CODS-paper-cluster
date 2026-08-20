@@ -1,0 +1,16 @@
+{
+  "torch": "2.9.0+cu128",
+  "cuda_runtime": "12.8",
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition MIG 1g.24gb",
+  "cuda_arch_list": [
+    "sm_70",
+    "sm_75",
+    "sm_80",
+    "sm_86",
+    "sm_90",
+    "sm_100",
+    "sm_120"
+  ],
+  "cuda_compute_test_sum": -0.24002838134765625,
+  "blackwell_sm120_supported": true
+}

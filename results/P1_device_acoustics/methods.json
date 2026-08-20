@@ -1,0 +1,11 @@
+{
+  "native_sample_rate_hz": 8000,
+  "analysis_sample_rate_hz": 16000,
+  "analysis_nyquist_hz": 8000.0,
+  "native_information_nyquist_hz": 4000.0,
+  "resampling": "scipy_resample_poly_fir_antialias",
+  "normalization": "none (raw PCM amplitude preserved)",
+  "snr_note": "RMS-to-low-energy-frame proxy; not absolute SNR",
+  "paired_logical_windows": 19798,
+  "paired_subjects": 41
+}

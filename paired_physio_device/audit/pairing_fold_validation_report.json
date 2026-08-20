@@ -1,0 +1,60 @@
+{
+  "checks": [
+    {
+      "name": "every_paired_positive_id_has_exactly_R_and_S",
+      "passed": true,
+      "detail": "10325/10325 paired_positive_id groups have both R and S; 0 incomplete (single-device only -- expected for the subset of windows near a subject's alignment-segment boundary where only one device's segment was usable; not itself a leakage issue, but recorded here)."
+    },
+    {
+      "name": "paired_rows_share_subject_id",
+      "passed": true,
+      "detail": "0 paired_positive_id groups have mismatched subject_id across R/S rows."
+    },
+    {
+      "name": "each_subject_assigned_to_exactly_one_fold",
+      "passed": true,
+      "detail": "0 subjects appear in more than one fold: {}"
+    },
+    {
+      "name": "manifest_and_fold_subject_sets_match",
+      "passed": true,
+      "detail": "only_in_manifest=[], only_in_folds=[]"
+    },
+    {
+      "name": "no_paired_event_split_across_folds",
+      "passed": true,
+      "detail": "0 paired events would straddle two folds (none expected, given checks 2+3)."
+    }
+  ],
+  "violations": [],
+  "pass": true,
+  "label_counts_per_fold": {
+    "0": {
+      "1": 3950,
+      "0": 4056
+    },
+    "1": {
+      "0": 3962,
+      "1": 4018
+    },
+    "2": {
+      "0": 3948,
+      "1": 3984
+    },
+    "4": {
+      "0": 3774,
+      "1": 3964
+    },
+    "3": {
+      "1": 3954,
+      "0": 3986
+    }
+  },
+  "n_subjects_per_fold": {
+    "0": 9,
+    "1": 8,
+    "2": 8,
+    "4": 8,
+    "3": 8
+  }
+}

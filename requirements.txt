@@ -1,0 +1,14 @@
+numpy==1.26.4
+pandas==2.2.3
+scipy==1.14.1
+scikit-learn==1.5.2
+librosa==0.10.2.post1
+soundfile==0.12.1
+matplotlib==3.9.2
+Pillow==10.4.0
+PyYAML==6.0.2
+joblib==1.4.2
+tqdm==4.66.5
+xgboost==2.1.1
+psutil==6.0.0
+transformers==4.45.2

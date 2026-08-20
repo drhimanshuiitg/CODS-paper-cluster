@@ -1,0 +1,13 @@
+{
+  "feature": "hubert",
+  "n_sampled": 2400,
+  "pca_n_components": 10,
+  "explained_variance_ratio_pc1_pc2": [
+    0.4958389103412628,
+    0.17777109146118164
+  ],
+  "explained_variance_ratio_cumulative_10pc": 0.8664830923080444,
+  "silhouette_by_device_10pc": 0.1448059231042862,
+  "silhouette_by_class_10pc": 0.007392299827188253,
+  "note": "Silhouette score in [-1,1]; higher means tighter, better-separated clusters under that grouping. Computed in the 10-component PCA space (not the 2D plot alone) for a less cherry-picked estimate. A higher device-silhouette than class-silhouette would indicate the frozen HuBERT embedding space separates recording device more cleanly than it separates the apnea-event label -- i.e. device identity is an easier, more dominant signal in this representation than the clinical label itself."
+}

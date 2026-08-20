@@ -1,0 +1,10 @@
+{
+  "valid": true,
+  "errors": [],
+  "total_error_count": 0,
+  "checked_positive_logical_windows": 11087,
+  "checked_negative_logical_windows": 11087,
+  "negative_negative_overlap_count": 484,
+  "negative_forbidden_overlap_count": 0,
+  "paired_logical_windows": 22174
+}

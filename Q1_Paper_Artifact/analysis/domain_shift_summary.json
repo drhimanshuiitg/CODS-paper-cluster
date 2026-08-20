@@ -1,0 +1,61 @@
+{
+  "n_recorder": 300,
+  "n_smartphone": 300,
+  "metrics": {
+    "rms": {
+      "recorder_mean": 0.009056097070676264,
+      "recorder_std": 0.010895020184148013,
+      "smartphone_mean": 0.01935677671223878,
+      "smartphone_std": 0.01520404984668763,
+      "mann_whitney_u": 20689.0,
+      "p_value": 2.3368127283278616e-30,
+      "cliffs_delta": -0.5402444444444445
+    },
+    "spectral_centroid_hz": {
+      "recorder_mean": 985.3384263244768,
+      "recorder_std": 105.44076653878308,
+      "smartphone_mean": 439.0218064551494,
+      "smartphone_std": 169.12844987820372,
+      "mann_whitney_u": 89202.0,
+      "p_value": 2.885099257230284e-96,
+      "cliffs_delta": 0.9822666666666666
+    },
+    "spectral_bandwidth_hz": {
+      "recorder_mean": 1005.3945714913735,
+      "recorder_std": 58.0950261889633,
+      "smartphone_mean": 680.6684558406721,
+      "smartphone_std": 138.40249008462345,
+      "mann_whitney_u": 88932.0,
+      "p_value": 4.0660169946173936e-95,
+      "cliffs_delta": 0.9762666666666666
+    },
+    "spectral_rolloff_hz": {
+      "recorder_mean": 2154.39679924981,
+      "recorder_std": 209.66428128010062,
+      "smartphone_mean": 816.3889904788507,
+      "smartphone_std": 451.23590529716216,
+      "mann_whitney_u": 89348.0,
+      "p_value": 6.853711582411039e-97,
+      "cliffs_delta": 0.985511111111111
+    },
+    "zero_crossing_rate": {
+      "recorder_mean": 0.07447710898175364,
+      "recorder_std": 0.019115749566493402,
+      "smartphone_mean": 0.022461374882485372,
+      "smartphone_std": 0.01335720286541396,
+      "mann_whitney_u": 88456.0,
+      "p_value": 4.147261285025424e-93,
+      "cliffs_delta": 0.9656888888888888
+    },
+    "spectral_flatness": {
+      "recorder_mean": 0.0003023080735389764,
+      "recorder_std": 0.0002247559925760789,
+      "smartphone_mean": 2.496329946628369e-05,
+      "smartphone_std": 2.4812314276497424e-05,
+      "mann_whitney_u": 89780.0,
+      "p_value": 9.481402357140613e-99,
+      "cliffs_delta": 0.9951111111111111
+    }
+  },
+  "note": "Mann-Whitney U (two-sided) on window-level statistics, stratified by device x label. This is a window-level test (not subject-level); treat p-values as indicative of aggregate acoustic distributional shift, not as a subject-independent significance claim in the sense used elsewhere in this project's classifier evaluation."
+}

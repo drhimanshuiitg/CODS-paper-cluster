@@ -1,0 +1,8 @@
+representation,classifier,protocol,reason
+full_minus_wav2vec2,svm_rbf,S_S,"Incomplete 5-fold predictions for full_minus_wav2vec2/svm_rbf/S_S: have [0, 1, 2]"
+full_minus_data2vec_audio,svm_rbf,R_R,Incomplete 5-fold predictions for full_minus_data2vec_audio/svm_rbf/R_R: have []
+full_minus_data2vec_audio,svm_rbf,S_S,Incomplete 5-fold predictions for full_minus_data2vec_audio/svm_rbf/S_S: have []
+full_minus_data2vec_spectrogram,svm_rbf,R_R,Incomplete 5-fold predictions for full_minus_data2vec_spectrogram/svm_rbf/R_R: have []
+full_minus_data2vec_spectrogram,svm_rbf,S_S,Incomplete 5-fold predictions for full_minus_data2vec_spectrogram/svm_rbf/S_S: have []
+full_minus_data2vec,svm_rbf,R_R,Incomplete 5-fold predictions for full_minus_data2vec/svm_rbf/R_R: have []
+full_minus_data2vec,svm_rbf,S_S,Incomplete 5-fold predictions for full_minus_data2vec/svm_rbf/S_S: have []
