@@ -14,6 +14,7 @@ cd "$TMPDIR" || exit 1
 PROJECT=/userhome/phd/h.sharma/CODS-paper
 ENV_DIR="$PROJECT/.venv"
 GPU_ENV_DIR="$PROJECT/.gpu_classifier_venv"
+BOOTSTRAP_WHEELS="$PROJECT/.bootstrap_wheels"
 mkdir -p "$PROJECT/logs" "$PROJECT/environment" "$PROJECT/checkpoints/huggingface"
 cd "$PROJECT"
 
@@ -23,11 +24,15 @@ bootstrap_venv() {
     python3 -m venv --without-pip "$target"
   fi
   if ! "$target/bin/python" -m pip --version >/dev/null 2>&1; then
-    local get_pip="$TMPDIR/get-pip.py"
-    if [[ ! -f "$get_pip" ]]; then
-      curl --fail --location --retry 3 --output "$get_pip" https://bootstrap.pypa.io/get-pip.py
+    local pip_wheel
+    pip_wheel=$(find "$BOOTSTRAP_WHEELS" -maxdepth 1 -name 'pip-*.whl' | sort | tail -n 1)
+    if [[ -z "$pip_wheel" ]]; then
+      echo "Missing bootstrap pip wheel in $BOOTSTRAP_WHEELS" >&2
+      echo "Prefetch on the login node with: python3 -m pip download --only-binary=:all: --no-deps --dest $BOOTSTRAP_WHEELS pip setuptools wheel" >&2
+      return 1
     fi
-    "$target/bin/python" "$get_pip"
+    PYTHONPATH="$pip_wheel" "$target/bin/python" -m pip install \
+      --no-index --find-links "$BOOTSTRAP_WHEELS" pip setuptools wheel
   fi
 }
 
