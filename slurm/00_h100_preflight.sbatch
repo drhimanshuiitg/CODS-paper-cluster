@@ -10,6 +10,7 @@
 #SBATCH --error=/userhome/phd/h.sharma/CODS-paper/logs/slurm_%x_%j.err
 
 set -euo pipefail
+cd "$TMPDIR" || exit 1
 
 PROJECT="/userhome/phd/h.sharma/CODS-paper"
 DATASET_ROOT="/userhome/phd/h.sharma/Sleep quad Net/Data_v5_extracted/Data"
