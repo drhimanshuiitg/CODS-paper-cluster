@@ -1,7 +1,7 @@
-strategy_source: /home/pkdas/IEEE_healthcomm_workshop/Sleep_QuadNet_Workshop_Experiment_Plan.md
-base_config: /home/pkdas/IEEE_healthcomm_workshop/configs/base.yaml
-manifest: /home/pkdas/IEEE_healthcomm_workshop/metadata/dataset_manifest_aligned.csv
-folds: /home/pkdas/IEEE_healthcomm_workshop/metadata/subject_folds_5cv_aligned.csv
+strategy_source: /userhome/phd/h.sharma/CODS-paper/Sleep_QuadNet_Workshop_Experiment_Plan.md
+base_config: /userhome/phd/h.sharma/CODS-paper/configs/base.yaml
+manifest: /userhome/phd/h.sharma/CODS-paper/metadata/dataset_manifest_aligned.csv
+folds: /userhome/phd/h.sharma/CODS-paper/metadata/subject_folds_5cv_aligned.csv
 seed: 42
 
 phase1_gate:

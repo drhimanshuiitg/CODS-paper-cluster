@@ -34,9 +34,9 @@ from sleep_quadnet.features import (
 from sleep_quadnet.io import load_manifest_window, load_yaml, read_csv_rows
 
 
-HEAR_VENV_PYTHON = "/scratch/pkdas/IEEE_healthcomm_workshop/hear_extractor/bin/python3"
-HEAR_WORKER = "/scratch/pkdas/IEEE_healthcomm_workshop/hear_extractor/hear_worker.py"
-HF_HOME = "/scratch/pkdas/IEEE_healthcomm_workshop/cache/huggingface"
+HEAR_VENV_PYTHON = "/userhome/phd/h.sharma/CODS-paper/hear_extractor/bin/python3"
+HEAR_WORKER = "/userhome/phd/h.sharma/CODS-paper/hear_extractor/hear_worker.py"
+HF_HOME = "/userhome/phd/h.sharma/CODS-paper/cache/huggingface"
 HEAR_CLIP_SAMPLES = 32000  # 2.0s @ 16kHz, HeAR's fixed native input
 
 

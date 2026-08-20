@@ -19,7 +19,7 @@ def main() -> None:
     parser.add_argument(
         "--dataset-dir",
         type=Path,
-        default=Path("/scratch/pkdas/IEEE_healthcomm_workshop/dataset/V5/Data"),
+        default=Path("/userhome/phd/h.sharma/Sleep quad Net/Data_v5_extracted/Data"),
     )
     parser.add_argument("--output-dir", type=Path, default=PROJECT_ROOT / "metadata")
     parser.add_argument("--seed", type=int, default=42)

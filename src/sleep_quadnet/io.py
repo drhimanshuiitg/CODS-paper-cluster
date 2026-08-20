@@ -110,6 +110,31 @@ def butter_bandpass(audio: np.ndarray, sample_rate: int, low_hz: float = 20.0, h
 
 def load_manifest_window(row: dict, config: dict, preprocessing: str) -> tuple[np.ndarray, int]:
     paths = [str(item) for item in parse_json_list(row["audio_paths_json"])]
+    dataset_dir = Path(config["dataset_dir"])
+    resolved_paths: list[str] = []
+    for path_text in paths:
+        path = Path(path_text)
+        if not path.exists():
+            # The aligned manifest is a provenance artifact generated on the
+            # original cluster and therefore retains its original absolute
+            # prefix. Resolve the stable subject/file suffix against the
+            # configured read-only dataset root without rewriting the CSV.
+            parts = path.parts
+            try:
+                data_index = parts.index("Data")
+            except ValueError:
+                data_index = -1
+            if data_index >= 0 and len(parts) > data_index + 2:
+                candidate = dataset_dir.joinpath(*parts[data_index + 1 :])
+                if candidate.exists():
+                    path = candidate
+        if not path.is_file():
+            raise FileNotFoundError(
+                f"Manifest audio file is unavailable: {path_text}; "
+                f"also checked configured dataset root {dataset_dir}"
+            )
+        resolved_paths.append(str(path))
+    paths = resolved_paths
     durations = [float(item) for item in parse_json_list(row["audio_segment_durations_json"])]
     audio, native_rate = _read_native_window(paths, durations, float(row["start_sec"]), float(row["end_sec"]))
     target_rate = int(config["audio"]["target_sample_rate"])

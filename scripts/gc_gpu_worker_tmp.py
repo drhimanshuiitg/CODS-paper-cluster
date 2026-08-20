@@ -38,11 +38,11 @@ import joblib
 
 from sleep_quadnet.evaluation import GPUSubprocessEstimator  # noqa: F401 -- must be importable for unpickling
 
-_GPU_WORKER_TMP = Path("/scratch/pkdas/IEEE_healthcomm_workshop/gpu_worker_tmp")
+_GPU_WORKER_TMP = Path("/userhome/phd/h.sharma/CODS-paper/gpu_worker_tmp")
 _CACHE_ROOTS = [
-    ("classifier.joblib", Path("/scratch/pkdas/IEEE_healthcomm_workshop/checkpoints/downstream_fit_cache")),
-    ("pipeline.joblib", Path("/scratch/pkdas/IEEE_healthcomm_workshop/checkpoints/pca_cache")),
-    ("pipeline.joblib", Path("/scratch/pkdas/IEEE_healthcomm_workshop/checkpoints/coral_cache")),
+    ("classifier.joblib", Path("/userhome/phd/h.sharma/CODS-paper/checkpoints/downstream_fit_cache")),
+    ("pipeline.joblib", Path("/userhome/phd/h.sharma/CODS-paper/checkpoints/pca_cache")),
+    ("pipeline.joblib", Path("/userhome/phd/h.sharma/CODS-paper/checkpoints/coral_cache")),
 ]
 
 

@@ -1,16 +1,18 @@
 #!/bin/bash
 #SBATCH --job-name=sq_ab_top3
-#SBATCH --partition=gpu_small
-#SBATCH --gres=gpu:mig24gb:1
+#SBATCH --partition=gpu-H100
+#SBATCH --qos=h100
+#SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=64G
 #SBATCH --time=7-00:00:00
 #SBATCH --array=0-23%6
-#SBATCH --output=/home/pkdas/IEEE_healthcomm_workshop/logs/slurm_%x_%A_%a.out
-#SBATCH --error=/home/pkdas/IEEE_healthcomm_workshop/logs/slurm_%x_%A_%a.err
+#SBATCH --output=/userhome/phd/h.sharma/CODS-paper/logs/slurm_%x_%A_%a.out
+#SBATCH --error=/userhome/phd/h.sharma/CODS-paper/logs/slurm_%x_%A_%a.err
 
 set -euo pipefail
-PROJECT=/home/pkdas/IEEE_healthcomm_workshop
+cd "$TMPDIR" || exit 1
+PROJECT=/userhome/phd/h.sharma/CODS-paper
 CLASSIFIERS=(random_forest xgboost svm_rbf mlp)
 PROTOCOLS=(R_S S_R)
 task="$SLURM_ARRAY_TASK_ID"

@@ -1,15 +1,17 @@
 #!/bin/bash
 #SBATCH --job-name=sq_eff_all
-#SBATCH --partition=gpu_small
-#SBATCH --gres=gpu:mig24gb:1
+#SBATCH --partition=gpu-H100
+#SBATCH --qos=h100
+#SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=64G
 #SBATCH --time=2-00:00:00
-#SBATCH --output=/home/pkdas/IEEE_healthcomm_workshop/logs/slurm_%x_%j.out
-#SBATCH --error=/home/pkdas/IEEE_healthcomm_workshop/logs/slurm_%x_%j.err
+#SBATCH --output=/userhome/phd/h.sharma/CODS-paper/logs/slurm_%x_%j.out
+#SBATCH --error=/userhome/phd/h.sharma/CODS-paper/logs/slurm_%x_%j.err
 
 set -euo pipefail
-PROJECT=/home/pkdas/IEEE_healthcomm_workshop
+cd "$TMPDIR" || exit 1
+PROJECT=/userhome/phd/h.sharma/CODS-paper
 export HF_HOME="$PROJECT/checkpoints/huggingface" HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 TOKENIZERS_PARALLELISM=false
 export PYTHONPATH="$PROJECT/src" MPLCONFIGDIR="$PROJECT/.cache/matplotlib" NUMBA_CACHE_DIR="$PROJECT/.cache/numba"
 mkdir -p "$MPLCONFIGDIR" "$NUMBA_CACHE_DIR"

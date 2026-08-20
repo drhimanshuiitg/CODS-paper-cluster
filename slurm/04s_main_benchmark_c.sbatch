@@ -1,15 +1,17 @@
 #!/bin/bash
 #SBATCH --job-name=sq_main_c
-#SBATCH --partition=gpu_small
-#SBATCH --gres=gpu:mig24gb:1
+#SBATCH --partition=gpu-H100
+#SBATCH --qos=h100
+#SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=150G
 #SBATCH --time=7-00:00:00
-#SBATCH --output=/home/pkdas/IEEE_healthcomm_workshop/logs/slurm_%x_%j.out
-#SBATCH --error=/home/pkdas/IEEE_healthcomm_workshop/logs/slurm_%x_%j.err
+#SBATCH --output=/userhome/phd/h.sharma/CODS-paper/logs/slurm_%x_%j.out
+#SBATCH --error=/userhome/phd/h.sharma/CODS-paper/logs/slurm_%x_%j.err
 
 set -euo pipefail
-PROJECT=/home/pkdas/IEEE_healthcomm_workshop
+cd "$TMPDIR" || exit 1
+PROJECT=/userhome/phd/h.sharma/CODS-paper
 # 2 concurrent fold-run workers x 4 threads/worker = 8 threads, matching
 # --cpus-per-task above. Fewer workers than 04p because data2vec_fusion
 # (1536-d) / full_fusion (3840-d) feature arrays are larger and svm_rbf's

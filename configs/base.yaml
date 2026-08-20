@@ -1,11 +1,11 @@
-project_root: /home/pkdas/IEEE_healthcomm_workshop
-dataset_dir: /scratch/pkdas/IEEE_healthcomm_workshop/dataset/V5/Data
+project_root: /userhome/phd/h.sharma/CODS-paper
+dataset_dir: /userhome/phd/h.sharma/Sleep quad Net/Data_v5_extracted/Data
 seed: 42
 folds: 5
 
 metadata:
-  manifest: /home/pkdas/IEEE_healthcomm_workshop/metadata/dataset_manifest_aligned.csv
-  subject_folds: /home/pkdas/IEEE_healthcomm_workshop/metadata/subject_folds_5cv_aligned.csv
+  manifest: /userhome/phd/h.sharma/CODS-paper/metadata/dataset_manifest_aligned.csv
+  subject_folds: /userhome/phd/h.sharma/CODS-paper/metadata/subject_folds_5cv_aligned.csv
   reference_clock: smartphone_annotation_seconds
   recorder_alignment: piecewise_linear_unlabeled_rms_envelope_cross_correlation
 
@@ -111,5 +111,5 @@ representations:
   full_fusion_v2: [hubert, wavlm, wav2vec2, data2vec_audio]
 
 logging:
-  master_log: /home/pkdas/IEEE_healthcomm_workshop/results/master_experiment_log.csv
+  master_log: /userhome/phd/h.sharma/CODS-paper/results/master_experiment_log.csv
   git_commit_fallback: unavailable

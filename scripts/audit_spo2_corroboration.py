@@ -28,7 +28,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from compute_odi_hypoxic_burden import load_spo2, mask_awake  # noqa: E402
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-DATASET_DIR = Path("/scratch/pkdas/IEEE_healthcomm_workshop/dataset/V5/Data")
+DATASET_DIR = Path("/userhome/phd/h.sharma/Sleep quad Net/Data_v5_extracted/Data")
 OUTPUT_DIR = PROJECT_ROOT / "results" / "audit"
 LAG_TOLERANCE_SEC = 45.0  # circulatory delay between event onset and SpO2 nadir
 

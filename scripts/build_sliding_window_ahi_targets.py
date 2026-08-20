@@ -125,7 +125,7 @@ def severity_bin(ahi_proxy: float) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset-dir", type=Path, default=Path("/scratch/pkdas/IEEE_healthcomm_workshop/dataset/V5/Data"))
+    parser.add_argument("--dataset-dir", type=Path, default=Path("/userhome/phd/h.sharma/Sleep quad Net/Data_v5_extracted/Data"))
     parser.add_argument("--output", type=Path, default=PROJECT_ROOT / "metadata" / "sliding_window_ahi_targets.csv")
     parser.add_argument("--epoch-sec", type=float, default=EPOCH_SEC)
     args = parser.parse_args()

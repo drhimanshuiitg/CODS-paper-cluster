@@ -5,6 +5,8 @@ cached_features_quarantine_unaligned/
 checkpoints/
 paired_physio_device/checkpoints/
 .venv/
+.gpu_classifier_venv/
+gpu_worker_tmp/
 
 # Raw run logs -- large, regenerable, not needed to reproduce the pipeline
 logs/

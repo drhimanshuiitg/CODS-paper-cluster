@@ -1,15 +1,17 @@
 #!/bin/bash
 #SBATCH --job-name=sq_pca
-#SBATCH --partition=gpu_small
-#SBATCH --gres=gpu:mig24gb:1
+#SBATCH --partition=gpu-H100
+#SBATCH --qos=h100
+#SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=128G
 #SBATCH --time=7-00:00:00
-#SBATCH --output=/home/pkdas/IEEE_healthcomm_workshop/logs/slurm_%x_%j.out
-#SBATCH --error=/home/pkdas/IEEE_healthcomm_workshop/logs/slurm_%x_%j.err
+#SBATCH --output=/userhome/phd/h.sharma/CODS-paper/logs/slurm_%x_%j.out
+#SBATCH --error=/userhome/phd/h.sharma/CODS-paper/logs/slurm_%x_%j.err
 
 set -euo pipefail
-PROJECT=/home/pkdas/IEEE_healthcomm_workshop
+cd "$TMPDIR" || exit 1
+PROJECT=/userhome/phd/h.sharma/CODS-paper
 # run_dimension_control.py handles one (protocol, fold) combo per invocation
 # with no internal --workers flag, so parallelism here is at the shell level:
 # 2 concurrent combos (xargs -P 2) x 4 threads/combo (OMP/MKL) = 8, matching

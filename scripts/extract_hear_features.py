@@ -39,9 +39,9 @@ from sleep_quadnet.features import FEATURE_DIMENSIONS, _open_cache, cache_paths 
 from sleep_quadnet.io import config_hash, file_sha256, load_manifest_window, load_yaml, read_csv_rows  # noqa: E402
 
 CLIP_SAMPLES = 32000  # HeAR's fixed native input: 2.0s @ 16kHz
-HEAR_VENV_PYTHON = "/scratch/pkdas/IEEE_healthcomm_workshop/hear_extractor/bin/python3"
-HEAR_WORKER = "/scratch/pkdas/IEEE_healthcomm_workshop/hear_extractor/hear_worker.py"
-HF_HOME = "/scratch/pkdas/IEEE_healthcomm_workshop/cache/huggingface"
+HEAR_VENV_PYTHON = "/userhome/phd/h.sharma/CODS-paper/hear_extractor/bin/python3"
+HEAR_WORKER = "/userhome/phd/h.sharma/CODS-paper/hear_extractor/hear_worker.py"
+HF_HOME = "/userhome/phd/h.sharma/CODS-paper/cache/huggingface"
 
 
 def to_fixed_clip(audio: np.ndarray) -> np.ndarray:

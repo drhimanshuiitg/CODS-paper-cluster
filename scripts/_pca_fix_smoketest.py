@@ -3,7 +3,7 @@
 (mirroring CORAL's target-aware fit) fix the all-one-class collapse, vs the
 current source-only PCA fit?"""
 import sys
-sys.path.insert(0, "/home/pkdas/IEEE_healthcomm_workshop/src")
+sys.path.insert(0, "/userhome/phd/h.sharma/CODS-paper/src")
 from pathlib import Path
 import numpy as np
 from sklearn.decomposition import PCA
@@ -15,11 +15,11 @@ from sleep_quadnet.evaluation import (
 )
 from sleep_quadnet.advanced import _calibration_safe_candidates
 
-config = load_yaml(Path("/home/pkdas/IEEE_healthcomm_workshop/configs/base.yaml"))
-config["project_root"] = "/home/pkdas/IEEE_healthcomm_workshop"
+config = load_yaml(Path("/userhome/phd/h.sharma/CODS-paper/configs/base.yaml"))
+config["project_root"] = "/userhome/phd/h.sharma/CODS-paper"
 manifest_path = Path(config["metadata"]["manifest"])
 fold_path = Path(config["metadata"]["subject_folds"])
-cache_root = Path("/home/pkdas/IEEE_healthcomm_workshop/cached_features")
+cache_root = Path("/userhome/phd/h.sharma/CODS-paper/cached_features")
 
 rows = read_csv_rows(manifest_path)
 folds = parse_folds(fold_path)

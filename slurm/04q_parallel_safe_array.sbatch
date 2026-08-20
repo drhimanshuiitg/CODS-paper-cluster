@@ -1,13 +1,14 @@
 #!/bin/bash
 #SBATCH --job-name=sq_main_quick
-#SBATCH --partition=gpu_small
-#SBATCH --gres=gpu:mig24gb:1
+#SBATCH --partition=gpu-H100
+#SBATCH --qos=h100
+#SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
 #SBATCH --time=1-00:00:00
 #SBATCH --array=0-2%2
-#SBATCH --output=/home/pkdas/IEEE_healthcomm_workshop/logs/slurm_%x_%A_%a.out
-#SBATCH --error=/home/pkdas/IEEE_healthcomm_workshop/logs/slurm_%x_%A_%a.err
+#SBATCH --output=/userhome/phd/h.sharma/CODS-paper/logs/slurm_%x_%A_%a.out
+#SBATCH --error=/userhome/phd/h.sharma/CODS-paper/logs/slurm_%x_%A_%a.err
 
 # Resume-safe quick-classifier work deliberately chosen to stay ahead of the
 # three existing sequential benchmark workers.  No GPU is requested because
@@ -15,8 +16,9 @@
 # pressure while gpu01 has ample CPU but little immediately free RAM.
 
 set -euo pipefail
+cd "$TMPDIR" || exit 1
 
-PROJECT=/home/pkdas/IEEE_healthcomm_workshop
+PROJECT=/userhome/phd/h.sharma/CODS-paper
 export PYTHONPATH="$PROJECT/src"
 export OMP_NUM_THREADS="$SLURM_CPUS_PER_TASK"
 export MKL_NUM_THREADS="$SLURM_CPUS_PER_TASK"

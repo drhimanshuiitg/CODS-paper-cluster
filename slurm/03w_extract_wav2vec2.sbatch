@@ -1,15 +1,17 @@
 #!/bin/bash
 #SBATCH --job-name=sq_ssl_w2v2
-#SBATCH --partition=gpu_small
-#SBATCH --gres=gpu:mig24gb:1
+#SBATCH --partition=gpu-H100
+#SBATCH --qos=h100
+#SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=64G
 #SBATCH --time=7-00:00:00
-#SBATCH --output=/home/pkdas/IEEE_healthcomm_workshop/logs/slurm_%x_%j.out
-#SBATCH --error=/home/pkdas/IEEE_healthcomm_workshop/logs/slurm_%x_%j.err
+#SBATCH --output=/userhome/phd/h.sharma/CODS-paper/logs/slurm_%x_%j.out
+#SBATCH --error=/userhome/phd/h.sharma/CODS-paper/logs/slurm_%x_%j.err
 
 set -euo pipefail
-PROJECT=/home/pkdas/IEEE_healthcomm_workshop
+cd "$TMPDIR" || exit 1
+PROJECT=/userhome/phd/h.sharma/CODS-paper
 export HF_HOME="$PROJECT/checkpoints/huggingface"
 export HF_HUB_DISABLE_TELEMETRY=1
 export TOKENIZERS_PARALLELISM=false

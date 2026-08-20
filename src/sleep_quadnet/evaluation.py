@@ -253,9 +253,10 @@ def _require_gpu(classifier: str) -> None:
 # being installed here. GPUSubprocessEstimator below bridges to it by
 # shelling out per fit/score call -- slower than an in-process call would be,
 # but keeps the two dependency stacks from ever conflicting.
-_GPU_VENV_PYTHON = "/scratch/pkdas/IEEE_healthcomm_workshop/gpu_classifier_test/bin/python"
-_GPU_WORKER_SCRIPT = "/scratch/pkdas/IEEE_healthcomm_workshop/gpu_classifier_test/cuml_worker.py"
-_GPU_WORKER_TMP = Path("/scratch/pkdas/IEEE_healthcomm_workshop/gpu_worker_tmp")
+_PROJECT_ROOT = Path(__file__).resolve().parents[2]
+_GPU_VENV_PYTHON = str(_PROJECT_ROOT / ".gpu_classifier_venv" / "bin" / "python")
+_GPU_WORKER_SCRIPT = str(_PROJECT_ROOT / "scripts" / "cuml_worker.py")
+_GPU_WORKER_TMP = _PROJECT_ROOT / "gpu_worker_tmp"
 # Generous relative to the ~130 min *whole-fold* figure in
 # slurm/09s_dimension_control.sbatch's comment (which covers CPU-side PCA
 # plus multiple calls) -- a single fit/score subprocess call should never

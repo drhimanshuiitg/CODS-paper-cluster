@@ -36,7 +36,7 @@ from sleep_quadnet.io import load_manifest_window, load_yaml  # noqa: E402
 from compute_odi_hypoxic_burden import load_spo2, mask_awake  # noqa: E402
 from audit_spo2_corroboration import LAG_TOLERANCE_SEC, detect_desat_windows  # noqa: E402
 
-DATASET_DIR = Path("/scratch/pkdas/IEEE_healthcomm_workshop/dataset/V5/Data")
+DATASET_DIR = Path("/userhome/phd/h.sharma/Sleep quad Net/Data_v5_extracted/Data")
 CONTEXT_PAD_SEC = 15.0
 
 

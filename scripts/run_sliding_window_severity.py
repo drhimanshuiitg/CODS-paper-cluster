@@ -85,7 +85,7 @@ def main() -> None:
     parser.add_argument("--config", type=Path, default=PROJECT_ROOT / "configs" / "base.yaml")
     parser.add_argument("--manifest", type=Path, default=PROJECT_ROOT / "metadata" / "sliding_window_audio_manifest.csv")
     parser.add_argument("--fold-file", type=Path, default=PROJECT_ROOT / "metadata" / "subject_folds_5cv_aligned.csv")
-    parser.add_argument("--cache-root", type=Path, default=Path("/scratch/pkdas/IEEE_healthcomm_workshop/cached_features_sliding_window"))
+    parser.add_argument("--cache-root", type=Path, default=Path("/userhome/phd/h.sharma/CODS-paper/cached_features_sliding_window"))
     parser.add_argument("--results-root", type=Path, default=PROJECT_ROOT / "results" / "P3_sliding_window_severity")
     parser.add_argument("--classifiers", default="svm_rbf,mlp,random_forest,xgboost")
     parser.add_argument("--protocols", default="R_R,S_S,R_S,S_R")
