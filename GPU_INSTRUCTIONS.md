@@ -8,25 +8,26 @@ For this project, always follow this separation:
 
 ```text
 CODE + RESULTS:
-  /home/pkdas/IEEE_healthcomm_workshop
+  /userhome/phd/h.sharma/CODS-paper
 
 DATASET:
-  /scratch/pkdas/IEEE_healthcomm_workshop
+  /userhome/phd/h.sharma/Sleep quad Net/Data_v5_extracted/Data
 ```
 
 When creating training scripts, configuration files, SLURM scripts, logs, checkpoints, plots, CSV files, JSON summaries, Markdown reports, or any other experiment outputs, save them under:
 
 ```bash
-/home/pkdas/IEEE_healthcomm_workshop
+/userhome/phd/h.sharma/CODS-paper
 ```
 
 When loading training/validation/test data, use the dataset from:
 
 ```bash
-/scratch/pkdas/IEEE_healthcomm_workshop
+/userhome/phd/h.sharma/Sleep quad Net/Data_v5_extracted/Data
 ```
 
-Do not reverse these paths.
+Do not reverse these paths. The dataset path contains spaces, so always quote it
+in shell commands and SLURM scripts.
 
 ---
 
@@ -56,6 +57,24 @@ Cluster login:
 ssh <username>@gpu.iitg.ac.in
 ```
 
+Current account and scheduler resources verified on 2026-08-20:
+
+```text
+Account user:      h.sharma
+Login host:        clusterlogin
+H100 partition:    gpu-H100
+H100 node:         gpu-H100-01
+H100 allocation:   1 GPU
+H100 QoS:          h100
+Node resources:    48 CPUs, 257675 MB configured memory
+Partition limit:   15 days
+```
+
+The scheduler advertises the H100 resource, but the precise GPU model, VRAM,
+driver, and CUDA compatibility must be recorded from inside an allocated job.
+`nvidia-smi` is not installed on the login node. Do not treat that as evidence
+that the compute node lacks a GPU.
+
 ## Project Paths
 
 ### Code and Results Workspace
@@ -63,7 +82,7 @@ ssh <username>@gpu.iitg.ac.in
 All source code, scripts, configurations, logs, checkpoints, figures, tables, and experiment results for this project must be stored under:
 
 ```bash
-/home/pkdas/IEEE_healthcomm_workshop
+/userhome/phd/h.sharma/CODS-paper
 ```
 
 This is the **main working directory** for the project.
@@ -75,12 +94,12 @@ Codex should open, edit, create, and save project files here.
 The dataset must be read from:
 
 ```bash
-/scratch/pkdas/IEEE_healthcomm_workshop
+/userhome/phd/h.sharma/Sleep quad Net/Data_v5_extracted/Data
 ```
 
-Treat this scratch location primarily as the **dataset/data source** for the project.
+Treat this location as the **read-only dataset/data source** for the project.
 
-Do not move the complete dataset into `/home/pkdas/IEEE_healthcomm_workshop`.
+Do not move or duplicate the complete dataset into `/userhome/phd/h.sharma/CODS-paper`.
 
 Do not duplicate large dataset files into the home directory unless explicitly instructed.
 
@@ -130,9 +149,13 @@ A typical IIT Guwahati GPU job script is:
 #!/bin/bash
 
 #SBATCH --job-name=my_experiment
-#SBATCH --partition=gpu_small
+#SBATCH --partition=gpu-H100
+#SBATCH --qos=h100
 #SBATCH --ntasks=1
 #SBATCH --gres=gpu:1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=64G
+#SBATCH --time=04:00:00
 #SBATCH --output=logs/%x_%j.out
 #SBATCH --error=logs/%x_%j.err
 #SBATCH --mail-type=ALL
@@ -147,10 +170,23 @@ echo "========================================"
 
 nvidia-smi
 
-# Activate the correct environment here.
-# Example:
-# source ~/miniconda3/etc/profile.d/conda.sh
-# conda activate myenv
+PROJECT="/userhome/phd/h.sharma/CODS-paper"
+DATASET_ROOT="/userhome/phd/h.sharma/Sleep quad Net/Data_v5_extracted/Data"
+cd "$PROJECT"
+
+# Activate the project environment after it has been created and validated.
+source "$PROJECT/.venv/bin/activate"
+
+python3 - <<'PY'
+import torch
+
+if not torch.cuda.is_available():
+    raise RuntimeError("SLURM allocated a job but PyTorch cannot see a CUDA GPU")
+print("torch:", torch.__version__)
+print("torch CUDA:", torch.version.cuda)
+print("GPU:", torch.cuda.get_device_name(0))
+print("VRAM bytes:", torch.cuda.get_device_properties(0).total_memory)
+PY
 
 # Run the experiment here.
 # Example:
@@ -161,7 +197,10 @@ echo "Finished: $(date)"
 echo "========================================"
 ```
 
-Do not assume the partition name, GPU type, walltime, memory, or environment if existing project scripts contain more accurate information.
+For this cluster, use `gpu-H100`, `h100`, and `gpu:1`. Do not copy the old
+project's `gpu_small` or `gpu:mig24gb:1` requests; those belong to a different
+cluster. Choose CPU, RAM, and walltime per workload without exceeding the
+verified node and partition limits above.
 
 Inspect existing `.sh`, `.slurm`, `.sbatch`, or config files first.
 
@@ -182,7 +221,7 @@ Before running `sbatch`, verify:
 9. Correct train/validation/test split
 10. Existing results will not be overwritten
 11. Required output/log directories exist
-12. The command runs from `/scratch`
+12. The command runs from `/userhome/phd/h.sharma/CODS-paper`
 13. No heavy command is being executed directly on the login node
 
 If an experiment already exists, inspect its logs and results before launching another run.
@@ -360,13 +399,13 @@ project/
 The project repository and results live under:
 
 ```bash
-/home/pkdas/IEEE_healthcomm_workshop
+/userhome/phd/h.sharma/CODS-paper
 ```
 
 The large dataset lives under:
 
 ```bash
-/scratch/pkdas/IEEE_healthcomm_workshop
+/userhome/phd/h.sharma/Sleep quad Net/Data_v5_extracted/Data
 ```
 
 Keep these roles separate.
@@ -504,7 +543,9 @@ and:
 python -c "import torch; print(torch.__version__); print(torch.version.cuda); print(torch.cuda.is_available())"
 ```
 
-Use this lightweight check only when it is safe on the login node and does not initialize an expensive workload.
+Run these checks inside a short SLURM allocation on this cluster. The login node
+does not currently provide `nvidia-smi`, and a login-node CUDA probe cannot
+validate the H100 compute environment.
 
 ---
 
@@ -658,4 +699,4 @@ Do not submit the GPU job unless I explicitly ask you to submit it.
 
 # Core Rule
 
-> **All heavy GPU experiments must run through SLURM. Code and results belong in `/home/pkdas/IEEE_healthcomm_workshop`, while datasets are read from `/scratch/pkdas/IEEE_healthcomm_workshop`. Never run training directly on the login node.**
+> **All heavy GPU experiments must run through SLURM on `gpu-H100` with QoS `h100` and `gpu:1`. Code and results belong in `/userhome/phd/h.sharma/CODS-paper`, while the read-only dataset is loaded from `/userhome/phd/h.sharma/Sleep quad Net/Data_v5_extracted/Data`. Never run training directly on the login node.**
